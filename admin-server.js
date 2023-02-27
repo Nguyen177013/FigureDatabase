@@ -1,4 +1,5 @@
 const express = require('express');
+const url = "mongodb+srv://Figure:Nguyen150801@figure.pd5pdzw.mongodb.net/figure_data?retryWrites=true&w=majority";
 const app = express();
 const mongoose = require('mongoose');
 
