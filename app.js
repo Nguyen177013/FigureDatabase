@@ -19,7 +19,7 @@ app.listen(3000,()=>{
     console.log("server listening on port",port);
 })
 app.get('/',(req,res)=>{
-    res.render('index');
+    res.render('index',{data:`<p>123</p>`});
 })
 app.get('/about',(req,res)=>{
     res.render('about');
