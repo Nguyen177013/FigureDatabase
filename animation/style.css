@@ -1,0 +1,51 @@
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    font-family: monospace;
+    letter-spacing: 20px;
+    width: max-content;
+}
+
+span {
+    opacity: 0;
+    animation: show_content 2s ease-in-out 1 forwards;
+}
+
+span :nth-child(2) {
+    animation-delay: 1s;
+}
+
+span :nth-child(3) {
+    animation-delay: 2s;
+}
+
+span :nth-child(4) {
+    animation-delay: 3s;
+}
+
+@keyframes show_content {
+    0% {
+        opacity: 0;
+        filter: blur(33px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0px);
+    }
+}
+
+#svg {
+    position: relative;
+    z-index: -1;
+}
+
+.ellipse:nth-child(2n) {
+    filter: blur(5px);
+}
+
+.line {
+    opacity: 0.6;
+}
