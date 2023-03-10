@@ -1,1 +1,1 @@
-this is team pervert
+dowload xong nho npm i
