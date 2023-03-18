@@ -1,95 +1,133 @@
 const Figure = require('../models/Figure');
-// const postFavorate = require('../models/postFavorate');
-// const Artist = require('../models/artists');
-// const Categories = require('../models/Categories');
-// const Characters = require('../models/Characters');
-// const Companies = require('../models/Companys');
-// const Materials = require('../models/materials');
-// const Origins = require('../models/origin');
-const Views = require('../models/userView');
-const Favorate = require('./favorate');
-const Comment = require('../controllers/comment');
-const Post = require('../models/userpost');
-const thisDate = new Date();
+const Artist = require('../models/artists');
+const Categories = require('../models/Categories');
+const Characters = require('../models/Characters');
+const Companies = require('../models/Companys');
+const Materials = require('../models/materials');
+const Origins = require('../models/Origins')
+const clound = require('../cloudinary');
+const path = require('path');
+const multer  = require('multer');
+const storage = multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,path.join(__dirname, '..','public',"img"))
+    },
+        filename:(req,file,cb)=>{
+            cb(null,Date.now()+path.extname(file.originalname));
+    },
+});
+
+
+const upload = multer({
+    storage:storage,
+    limits:{
+        fileSize: 1024 * 1024 * 25
+    },
+}).array('img',20);
+
+
+
 class FigureController{
+
+    // hiển thị thông tin index
     async index (req,res){
-        try{
-            let thisMonth = thisDate.getMonth()+1;
-            let thisYear = thisDate.getFullYear();
-            const latest = Figure.find().populate('category').populate('artists').populate('character').sort({_id: -1}).limit(6);
-            let [late,topView,month] = await Promise.all([latest,Views.sortView(),Figure.getByMonth(thisMonth,thisYear,0,6)]);
-            res.render('Home/index',{figures:late,months:month,views:topView});
-            }
-            catch(ex){
-                console.log(ex.message);
-            }
-        }
-        async latest_fig(req,res){
-        const figPerPage = 15;
-        const length = await Figure.find().count();
-        const page = req.params.p-1;
-        const latest = await Figure.find().populate('category').populate('artists').populate('character')
-        .sort({_id: -1}).skip(figPerPage * page).limit(figPerPage);
-        res.render('Figure/latest',{length,page,latest:latest});
-    }
-    async figThismonth(req,res){
-        let thisMonth = thisDate.getMonth()+1;
-        let thisYear = thisDate.getFullYear(); 
-        const page = req.params.p-1;
-        const limit = 15;
-        let length = await Figure.getByMonth(thisMonth,thisYear,0,0);
-        let data = await Figure.getByMonth(thisMonth,thisYear,page,limit);
-        res.render('Figure/months',{length:length.length,page,latest:data});
-    }
-    async topview(req,res){
-        const page = req.params.p-1;
-        const limit = 15;
-        const data = await Views.sortView(page,limit);
-        const length = await Views.sortView(0,0);
-        console.log(length);
-        res.render('Figure/fires',{length:length.length,page,latest:data});
-    }
-    async figure_detail(req,res){
-        const fig_id = req.params.id;
-        let userId = res?.locals?.user?.id;
-        const figure = Figure.findById(fig_id).populate('category')
+        const artists = await Artist.find();
+        const categories = await Categories.find();
+        const characters = await Characters.find();
+        const companies = await Companies.find();
+        const materials = await Materials.find();
+        const origins = await Origins.find();
+        const figId = req.params.id;
+        const data =  await Figure.findById(figId).populate('category')
         .populate('artists').populate('character')
         .populate('origin').populate('company').populate('materials');
-        const views =  Views.find({figure:fig_id}).count();
-        const total = Favorate.totalFavorate(fig_id);
-        let comments = Comment.getAllComment(fig_id);
-        let check = Favorate.checkUser(userId,fig_id);
-        let involve = Post.find({character:fig_id});
-        const [a,b,c,d,e,f] = await Promise.all([figure,views,total,comments,check,involve]);
-        let displayPost =[];
-        f.map(ele=>{
-            return displayPost.push(ele.images[0].url);
-        })
-        res.render('Home/detail',{title:"detail",figure:a,views:b,favorate:c,comments:d,check:e,displayPost});
+        // console.log(figures);
+        const figures = await Figure.find().populate('category').populate('artists').populate('character');
+        res.render('body/index',{figure:data,title:"home",user:undefined,data:{artists,categories,characters,companies,materials,origins},figures:figures});
     }
-    async itemFigure(req,res){
-        const figure = await Figure.find();
-        res.render('Figure/items',{figures: figure,status:'fire'});
+    async figDetail(req, res){
+        const artists = await Artist.find();
+        const categories = await Categories.find();
+        const characters = await Characters.find();
+        const companies = await Companies.find();
+        const materials = await Materials.find();
+        const origins = await Origins.find();
+        const figId = req.params.id;
+        const data = await Figure.findById(figId).populate('category')
+        .populate('artists').populate('character')
+        .populate('origin').populate('company').populate('materials');
+        res.render('body/detail',{title:"detail",figure:data,user:undefined,data:{artists,categories,characters,companies,materials,origins}});
     }
-    async findFigure(req,res){
-        let searchName = req.query.name;
-        const figure = await Figure.find({name:{'$regex':searchName,$options: 'is'}});
-        res.render('Figure/find',{name:searchName,figures:figure});
+
+    async editIndex(req,res){
+        const figId = req.params.id;
+        const artists = await Artist.find();
+        const categories = await Categories.find();
+        const characters = await Characters.find();
+        const companies = await Companies.find();
+        const materials = await Materials.find();
+        const origins = await Origins.find();
+        const data = await Figure.findById(figId).populate('category')
+        .populate('artists').populate('character')
+        .populate('origin').populate('company').populate('materials');
+       
+        res.render('body/detail',{title:"detail",data:{artists,categories,characters,companies,materials,origins},user:undefined,detail:data});
     }
-    async findNav(req,res){
-        try{
-            let searchName = req.body.name;
-            if(searchName){
-                const figure = await Figure.find({name:{'$regex':searchName,$options: 'is'}}).populate('origin');
-            res.json({figures:figure});
+    async createIndex(req,res){
+        const artists = await Artist.find();
+        const categories = await Categories.find();
+        const characters = await Characters.find();
+        const companies = await Companies.find();
+        const materials = await Materials.find();
+        const origins = await Origins.find();
+        res.render('body/create',{data:{artists,categories,characters,companies,materials,origins}, title:'create',user:undefined});
+    }
+    //  Lưu trữ thông tin 
+    async addFigure(req,res){
+        let dataImg = [];
+        try{   
+            const data=req.body;
+            for(let ele of req.files){
+                const result = await clound.v2.uploader.upload(ele.path,{folder: 'Figure', resource_type: 'image'});
+                dataImg.push(result.secure_url)
+            }
+            data.character = JSON.parse(data.character);
+            data.company = JSON.parse(data.company);
+            data.artists = JSON.parse(data.artists);
+            data.materials = JSON.parse(data.materials);
+            data['images'] = dataImg;
+            let result = await Figure.create(data);
+            console.log(result);
+            await res.redirect('/');
         }
-        else
-        res.json({figures:''});
+        catch(ex){
+            console.log(ex.message);
+        }
     }
-    catch(e){
-        console.log(e.message);
-    }
+    async editFigure(req,res){
+        const figId = req.params.id;
+        let dataImg = [];
+        
+        try{   
+            const data=req.body;
+            for(let ele of req.files){
+                const result = await clound.v2.uploader.upload(ele.path,{folder: 'Figure', resource_type: 'image'});
+                dataImg.push(result.secure_url)
+            }
+            data.character = JSON.parse(data.character);
+            data.company = JSON.parse(data.company);
+            data.artists = JSON.parse(data.artists);
+            data.materials = JSON.parse(data.materials);
+           if(dataImg.length>0)  
+            data['images'] = dataImg;
+            let result = await Figure.findByIdAndUpdate(figId,data);
+            console.log(result);
+            await res.redirect('/');
+        
+        }
+        catch(ex){
+            console.log(ex.message);
+        }
     }
 }
-
 module.exports = new FigureController;

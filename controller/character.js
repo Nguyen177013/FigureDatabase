@@ -1,32 +1,86 @@
-const character = require('../models/Characters');
-const figure = require('../models/Figure');
-const origins = require('../models/Origins')
-const company = require('../models/Companys');
-const mongoose = require('mongoose');
-const companyController = require('../controllers/company')
-class characterController{
-    async character_index(req,res){
-        const characters = await character.find();
-        res.render('Character/index',{characters: characters});
-    }
-    async Character_get(req,res){
-        const charId = req.params.id;
-        const detail = await character.findById(charId);
-        const figure_data = await figure.find({character:mongoose.Types.ObjectId(charId)}).populate('origin').populate('company');
-        let result = [];
-        for(let ele of figure_data){
-            companyController.containCompanies(ele.company,result);
+const Characters = require('../models/Characters');
+const Origins = require('../models/Origins');
+const Figure = require('../models/Figure');
+const multer  = require('multer');
+const path = require('path');
+const clound = require('../cloudinary')
+const storage = multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,path.join(__dirname, '..','public',"img",'mona'))
+    },
+        filename:(req,file,cb)=>{
+            cb(null,Date.now()+path.extname(file.originalname));
+    },
+});
+const upload = multer({
+    storage:storage,
+    limits:{
+        fileSize: 1024 * 1024 * 25
+    },
+}).array('img',20);
+    class CharactersController{
+        async indexChar (req,res){
+            const characters = await Characters.find().populate('name');
+            const origins = await Origins.find();
+            console.log(characters);
+            res.render('body/charactersHome',{data:characters,title:"charactersHome",user:undefined,origins:origins});
         }
-        res.render('Character/detail',{character:detail,figures:figure_data,company:result});
+        async charDetail(req, res){
+            const charId = req.params.id;
+            const characters = await Characters.find();
+            const data = await Characters.findById(charId).populate('name')
+            .populate('original').populate('origin');
+            let charID = data._id;
+            const figures = await Figure.find({character: charID});
+            const origins = await Origins.find();
+            res.render('body/charactersDetail',{title:"charactersDetail",characters:data,user:undefined,figures:figures,data:{characters,origins}});
+        }
+        async createCharIndex(req,res){
+            const origins = await Origins.find();
+            
+            res.render('body/createChar',{data:{origins}, title:'createChar',user:undefined});
+        }
+
+        async editIndexChar(req,res){
+            const charId = req.params.id;
+            const characters = await Characters.find();
+            const origins = await Origins.find();
+            const data = await Characters.findById(charId).populate('name')
+            .populate('original').populate('origin');
+            console.log(data);
+            res.render('body/editChar',{title:"editChar",data:{characters,origins},user:undefined,detail:data});
+        }
+
+        async editChar(req,res){
+            const charId = req.params.id;
+            const data = req.body;
+            if(req.file || req.files){
+                const img = await clound.v2.uploader.upload(req.file.path,{folder: 'Character', resource_type: 'image'});
+                data['image'] = img.secure_url;
+            }
+            await Characters.findByIdAndUpdate(charId,data);
+            await res.redirect('/');
+        }
+        
+        async addChar(req,res){
+            try{   
+            const data = req.body;
+            const img = await clound.v2.uploader.upload(req.file.path,{folder: 'Character', resource_type: 'image'});
+            data['image'] = img.secure_url;
+            await Characters.create(data);
+            res.redirect('/');
+            }
+            catch(ex){
+                console.log(ex.message);
+            }
+        }
+        async getChar(req,res){
+            let name = req.params.name;
+         
+            let data = await Characters.find({name:name});
+    
+            
+            res.redirect(`/charactersDetail/${data[0]._id}`); //đang lỗi// ???????????
+        }
     }
-    async getAllChars(){
-        const data = await character.find();
-        return data;
-    }
-    async getCharbyOrg(req,res){
-        const orgId = req.params.id;
-        let characters = await figure.find({character:orgId});
-        res.json({characters});
-    }
-}
-module.exports = new characterController;
+module.exports = new CharactersController
