@@ -1,0 +1,63 @@
+<%-include('../partials/login_header.ejs')%>
+<div id="toast">
+</div>
+<div class="loading">
+    <div class="lds-dual-ring"></div>
+</div>
+<main>
+    <div class="login_form">
+        <div class="login_title">
+            <h3>Sending mail</h3>
+        </div>
+        <div class="content">
+            <form class="login">
+                <div class="user_form">
+                    <input type="text" class="text" name="email" required>
+                    <label for="text">Email</label>
+                </div>
+                <div class="login_btn">
+                    <button>Send Mail</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<script src="/script/ToastEvent.js"></script>
+<script>
+    let form = document.querySelector('form');
+    let loading = document.querySelector('.loading');
+    form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        loading.style.display = 'flex';
+        let email = form.email.value;
+        try{
+            const res = await fetch('/signup/sendmail',{
+                method:'POST',
+                body: JSON.stringify({email}),
+                headers:{'Content-Type': 'application/json'}
+            });
+            const data = await res.json();
+            console.log(data);
+            if(data?.err){
+                loading.style.display = 'none';
+                    toastHandle('Warning','warning',`${data.err.email} ${data.err.username} ${data.err.password}`);        
+                    return;
+                }
+            if(!data.user){
+                loading.style.display = 'none';
+                toastHandle('Error','error','Server cannot create your account. Please try again');
+            }
+            else{
+                setTimeout(function(){
+                    window.location.assign('/');
+                },2000)
+                loading.style.display = 'none';
+                toastHandle('Login success','success',`Hello ${data.user}`);
+            }
+        }
+        catch(ex){
+            console.log(ex);
+        }
+    })
+</script>
+<%-include('../partials/footer.ejs')%>

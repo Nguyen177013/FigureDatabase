@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
-router.get('/',(req,res)=>{
-    res.render("index",{data:"ahai"});
-})
+const category = require('../controllers/category');
+router.get('/:id',category.figCate);
 module.exports = router;

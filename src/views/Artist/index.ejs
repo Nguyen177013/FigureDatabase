@@ -1,0 +1,35 @@
+<%-include('../partials/header.ejs')%>
+<link rel="stylesheet" href="../style/items.css">
+<%-include('../partials/nav.ejs')%>
+<main>
+    <section class="detail_fig detail">
+        <div class="container list_info">
+            <div class="detail_fig">
+                <div class="fig_info">
+                    <h2>Artists</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="detail">
+        <div class="content info">
+            <div class="figures">
+                <%artists.forEach(artist=>{%>
+                <div class="figure_detail">
+                    <a href="/artist/<%=artist._id%>">
+                        <%if(artist?.image){%>
+                            <img src="<%=artist.image%>" alt="">
+                        <%}else{%>
+                            <img src="/imgs/detail/empty.png" alt="">
+                        <%}%>
+                    </a>
+                    <h5 class="about_figure">
+                        <%=artist.name%>
+                    </h5>
+                </div>
+            <%})%>
+            </div>
+        </div>
+    </section>
+</main>
+<%-include('../partials/footer.ejs')%>

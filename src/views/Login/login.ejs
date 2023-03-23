@@ -1,0 +1,89 @@
+<%-include('../partials/login_header.ejs')%>
+<div id="toast">
+
+</div>
+<main>
+    <div class="login_form">
+        <div class="login_title">
+            <h3>Login</h3>
+        </div>
+        <div class="content">
+            <form class="login">
+                <div class="user_form">
+                    <input type="text" class="text" name="username" required>
+                    <label for="text">Username</label>
+                </div>
+                <div class="user_form">
+                    <input type="password" class="text" name="password" required>
+                    <label for="text">Password</label>
+                </div>
+                <div class="register">
+                    <a href="/signup/register">Register</a>
+                </div>
+                <div class="forgot_pass">
+                    <a href="/signup/sendmail">Forgot password</a>
+                </div>
+                <div class="login_btn">
+                    <button>Login</button>
+                </div>
+            </form>
+            <div class="login_option">
+                <h5>Or Sign up</h5>
+                <div class="items_option">
+                    <div class="options">
+                        <div class="option_img">
+                            <a href="/signup/facebook"><img src="https://www.facebook.com/images/fb_icon_325x325.png" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option_img">
+                            <a href="/signup/google"><img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"
+                                    alt=""></a>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option_img">
+                            <a href=""><img src="https://img.icons8.com/small/512/github.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="/script/ToastEvent.js"></script>
+<script>
+    let form = document.querySelector('form');
+    form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        let username = form.username.value;
+        let password = form.password.value;
+        try{
+            const res = await fetch('/signup/login',{
+                method:'POST',
+                body: JSON.stringify({username,password}),
+                headers:{'Content-Type': 'application/json'}
+            });
+            const data = await res.json();
+            console.log(data);
+            if(data?.err){
+                    toastHandle('Warning','warning',`${data.err.email} ${data.err.username} ${data.err.password}`);        
+                    return;
+                }
+            if(!data.user){
+                toastHandle('Error','error','Server cannot create your account. Please try again');
+            }
+            else{
+                setTimeout(function(){
+                    window.location.assign('/');
+                },1000)
+                toastHandle('Login success','success',`Hello ${data.user}`);
+            }
+        }
+        catch(ex){
+            console.log(ex);
+        }
+    })
+</script>
+<%-include('../partials/footer.ejs')%>

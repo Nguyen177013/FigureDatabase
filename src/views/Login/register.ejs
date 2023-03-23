@@ -1,0 +1,99 @@
+<%-include('../partials/login_header.ejs')%>
+<div id="toast">
+
+</div>
+<main>
+    <div class="login_form">
+        <div class="login_title">
+            <h3>Register</h3>
+        </div>
+        <div class="content">
+            <form class="login">
+                <div class="user_form">
+                    <input type="text" class="text" name="username" autocomplete="off"  required>
+                    <label for="text">Username</label>
+                </div>
+                <div class="user_form">
+                    <input type="text" class="text" name="email" autocomplete="off"  required>
+                    <label for="text">Email</label>
+                </div>
+                <div class="user_form">
+                    <input type="password" class="text" name="password" required>
+                    <label for="text">Password</label>
+                </div>
+                <div class="user_form">
+                    <input type="password" class="text" name="confirm_password" required>
+                    <label for="text">Confirm password</label>
+                </div>
+                <div class="register">
+                    <a href="/signup/login">Login</a>
+                </div>
+                <div class="login_btn">
+                    <button>Register</button>
+                </div>
+            </form>
+            <div class="login_option">
+                <h5>Or Sign up</h5>
+                <div class="items_option">
+                    <div class="options">
+                        <div class="option_img">
+                            <a href=""><img src="https://www.facebook.com/images/fb_icon_325x325.png" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option_img">
+                            <a href=""><img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"
+                                    alt=""></a>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option_img">
+                            <a href=""><img src="https://img.icons8.com/small/512/github.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="/script/ToastEvent.js"></script>
+<script>
+        let form = document.querySelector('form');
+        form.addEventListener('submit', async function(e){
+            e.preventDefault();
+            let username = form.username.value;
+            let email = form.email.value;
+            let password = form.password.value;
+            let confirm_password = form.confirm_password.value
+            if(password !== confirm_password){
+                toastHandle('Warning','warning','confirm password not match');
+                return;
+            }
+            try{
+                const res = await fetch('/signup/register',{
+                    method:'POST',
+                    body: JSON.stringify({username,email,password}),
+                    headers:{'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data?.err){
+                    toastHandle('Warning','warning',`Please enter ${data.err.email} ${data.err.username} ${data.err.password}`);        
+                    return;
+                }
+                if(!data.user){
+                    toastHandle('Error','error','Server cannot create your account. Please try again');
+                }
+                else{
+                    setTimeout(function(){
+                        window.location.assign('/signup/login');
+                    },1000)
+                    toastHandle('Your User Id','success',data.user);
+                }
+            }
+            catch(ex){
+                console.log(ex);
+            }
+        })
+</script>
+<%-include('../partials/footer.ejs')%>

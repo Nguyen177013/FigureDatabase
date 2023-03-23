@@ -1,0 +1,46 @@
+<%-include('../partials/header.ejs')%>
+<link rel="stylesheet" href="../style/items.css">
+<%-include('../partials/nav.ejs')%>
+<main>
+    <section class="detail_fig detail">
+        <div class="container list_info">
+            <div class="detail_fig">
+                <div class="fig_info">
+                    <h2>Items</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="list_info">
+            <div class="detail_fig">
+                <div class="fig_info">
+                    <a href="">Items on Fire</a>
+                </div>
+                <div class="fig_info">
+                    <a href="">Most wished</a>
+                </div>
+                <div class="fig_info">
+                    <a href="">Best rated</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="detail">
+        <div class="content info">
+            <div class="figures">
+                <%figures.forEach(figure=>{%>
+                <div class="figure_detail">
+                    <a href="/figure/<%=figure._id%>">
+                        <img src="<%=figure.images[0]%>" alt="">
+                    </a>
+                    <h5 class="about_figure">
+                        <%=figure.name%>
+                    </h5>
+                </div>
+            <%})%>
+            </div>
+        </div>
+    </section>
+</main>
+<%-include('../partials/footer.ejs')%>

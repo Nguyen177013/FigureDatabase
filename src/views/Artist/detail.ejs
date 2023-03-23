@@ -1,0 +1,65 @@
+<%-include('../partials/header.ejs')%>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" href="../style/Detail_small.css">
+<%-include('../partials/nav.ejs')%>
+<main>
+    <section class="detail_fig detail">
+        <div class="container list_info">
+            <div class="detail_fig">
+                <div class="fig_info">
+                    <h2><%=artist.name%></h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="detail">
+        <div class="content">
+            <div class="img_display">
+                <div class="flex_imgs col-2">
+                    <a href="" class="main">
+                        <%if(artist?.image){%>
+                            <img src="<%=artist.image%>" alt="">
+                        <%}else{%>
+                            <img src="/imgs/detail/empty.png" alt="">
+                        <%}%>
+                    </a>
+                </div>
+                <div class="fig_info bl">
+                    <ul class="info">
+                        <li><strong>Artist Name: </strong> <span><%=artist.name%> </span></li>
+                        <li><strong>HomePage: </strong><a href="<%=artist.Homepage%>"><%=artist.Homepage%></a></li>
+                        <li><strong>Companies Involve: 
+                            <div class="compimgs">
+                                <%company.forEach(com=>{%>
+                              <div class="comp">
+                                    <a href="<%=com.Homepage%>">
+                                        <img src="<%=com.image%>" alt="">
+                                    </a>
+                                </div>
+                                <%})%>
+  
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </section>
+    <section class="detail">
+        <div class="content info">
+            <h2>Figure</h2>
+            <div class="figures">
+                <%figures.forEach(figure=>{%>
+                    <div class="figure_detail">
+                        <a href="/figure/<%=figure._id%>">
+                            <img src="<%=figure.images[0]%>" alt="<%=figure.name%>">
+                        </a>
+                    </div>
+                <%})%>
+            </div>
+        </div>
+    </section>
+    <section class="detail">
+    </section>
+</main>
+<script src="/script/scroll.js"></script>
+<%-include('../partials/footer.ejs')%>
