@@ -1,0 +1,45 @@
+<%-include('../partials/header.ejs')%>
+<link rel="stylesheet" href="../../style/items.css">
+<%-include('../partials/nav.ejs')%>
+<main>
+    <section class="detail_fig detail">
+        <div class="container list_info">
+            <div class="detail_fig">
+                <div class="fig_info">
+                    <h2>Items on fire</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="detail">
+        <div class="content info">
+            <div class="figures">
+                <%latest.forEach(data=>{%>
+                <div class="figure_detail">
+                    <a href="/figure/<%=data.figure[0]?._id%>">
+                        <%if(data.figure[0]?.images[0]){%>
+                            <img src="<%=data.figure[0]?.images[0]%>" alt="">
+                        <%}else{%>
+                            <img src="/imgs/detail/empty.png" alt="">
+                        <%}%>
+                    </a>
+                    <h5 class="about_figure">
+                        <%=data.figure[0]?.name%>
+                    </h5>
+                </div>
+            <%})%>
+            </div>
+        </div>
+    </section>
+    <div class="pagination">
+    </div>
+</main>
+<script>
+    const page = '<%=page%>';
+    const length = '<%=length%>'
+</script>
+<script src="/script/pagination.js"></script>
+<script>
+    pagination('fires');
+</script>
+<%-include('../partials/footer.ejs')%>

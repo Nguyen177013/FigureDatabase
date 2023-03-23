@@ -1,0 +1,162 @@
+<script defer src="/script/loginEvent.js"></script>
+<script defer>
+    async function find() {
+        let find_text = document.querySelector('.find_text');
+        let list_data = document.querySelector('.find_data');
+        if (find_text.value !== '') {
+            list_data.classList.add('show_list');
+            try {
+                const req = await fetch('/figure/nav', {
+                    method: 'POST',
+                    body: JSON.stringify({ name: find_text.value }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                const data = await req.json();
+                list_data.replaceChildren();
+                if (data.figures) {
+                    data.figures.forEach(figure => {
+                        let list = document.createElement('div');
+                        let html = `
+                        <a href="/figure/${figure._id}">
+                    <div class="list_data">
+                                <div class="list_about">
+                                    <h4 style="color: #000 !important;">${figure.name}</h4>
+                                    <span style="color: #000 !important;"> from ${figure.origin.name}</span>
+                                    </div>
+                                    </div>
+                                    </a>
+                                    `;
+                        list.innerHTML = html;
+                        list_data.appendChild(list);
+                    })
+                }
+                else if(data.user){
+                    data.user.forEach(acc => {
+                        let list = document.createElement('div');
+                        let html = `
+                        <a href="/user/${acc._id}">
+                    <div class="list_data">
+                                <div class="list_about">
+                                    <h4 style="color: #000 !important;">${acc.username}</h4>
+                                    </div>
+                                    </div>
+                                    </a>
+                                    `;
+                        list.innerHTML = html;
+                        list_data.appendChild(list);
+                    })
+                }
+            }
+            catch (ex) {
+                console.log(ex.message);
+            }
+        }
+        else {
+            list_data.classList.remove('show_list');
+        }
+    }
+    async function closeModal(user = null) {
+        let userId = user;
+        let req = await fetch('/user/remove_notify', {
+            method: 'POST',
+            body: JSON.stringify({ id: userId }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        let res = await req.json();
+        if (res) {
+            html.classList.remove('disable');
+            body.classList.remove('disable');
+            let modal = document.querySelector('.modal');
+            modal.style.display = "none";
+        }
+    }
+</script>
+<header>
+    <div class="container">
+        <div class="header_logo"><a href="/">Figure <span>Database</span></a></div>
+        <div class="header_menu">
+            <div class="nav_menu">
+                <a href="/figure/favorate">Favorate</a>
+            </div>
+            <%if(user || user==null){%>
+                <%if(user?.status){%>
+                    <div class="nav_menu">
+                        <a href="/figure-wiki/">Community</a>
+                    </div>
+                    <%}%>
+                        <%}%>
+                            <div class="nav_menu">
+                                <a>More</a>
+                                <div class="sub_nav">
+                                    <a href="/character">Characters</a>
+                                    <a href="/artist">Artist</a>
+                                </div>
+                            </div>
+                            <div class="find">
+                                <form action="/figure/find">
+                                    <input type="text" name="name" placeholder="Find something ..." class="find_text"
+                                        onkeydown="find()">
+                                </form>
+                            </div>
+                            <div class="find_data">
+                            </div>
+        </div>
+        <%if(!user){%>
+            <div class="header_login">
+                <a href="/signup/login" href="">Login</a>
+            </div>
+            <%}else{%>
+                <div class="header_login">
+                    <input type="checkbox">
+                    <div class="user_img">
+                        <%if(user.image.img_url){%>
+                            <img src="<%=user.image.img_url%>" alt="">
+                            <%}else{%>
+                                <img src="/detail/unknow.png" alt="">
+                                <%}%>
+                    </div>
+                </div>
+                <div class="form_user user_detail">
+                    <div class="user_menu">
+                        <a href="/user/<%=user._id%>" class="user_img">
+                            <%if(user.image.img_url){%>
+                                <img src="<%=user.image.img_url%>" alt="">
+                                <%}else{%>
+                                    <img src="/detail/unknow.png" alt="">
+                                    <%}%>
+                        </a>
+                        <div class="user_name">
+                            <a href="/user/<%=user._id%>">
+                                <%=user.username%>
+                            </a>
+                        </div>
+                        <%if(user.vip){%>
+                            <div class="vip-status">
+                                <p>VIP</p>
+                            </div>
+                            <%}%>
+                    </div>
+                    <div class="user_logout">
+                        <div class="logout_btn">
+                            <a href="/signup/logout">
+                                <button>Logout</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <%}%>
+    </div>
+</header>
+<%if(status){%>
+    <div class="modal">
+        <div class="notificate">
+            <div class="body">
+                <h2>You are banned from this community</h2>
+                <p>You are unable to participate the community cause of your ignorant.</p>
+                <p>But you can able to interface the figure colelctions.</p>
+                <p>Best regard Admin :D</p>
+            </div>
+            <button class="btn-notify" onclick="closeModal('<%=user.id%>')">I understanded</button>
+        </div>
+    </div>
+    <%}%>

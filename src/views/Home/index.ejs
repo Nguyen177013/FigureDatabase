@@ -1,0 +1,114 @@
+<%-include('../partials/header.ejs')%>
+<link rel="stylesheet" href="../style/Index.css">
+<%-include('../partials/nav.ejs')%>
+    <main>
+        <div class="header_section">
+            <div class="menu_content">
+                <div class="content">
+                    <span>Figures</span>
+                    <span>Wiki</span>
+                    <span>Database</span>
+                </div>
+                <div class="about-figure">
+                    <p>
+                        A figure model, also known as a art model, assists art students who are learning to draw the human form. You carry out your duties in an art class, and your responsibilities are to pose nude and remain still as students draw what they see.
+                    </p>
+                </div>
+                <div class="btn-start">
+                    <a href="#main_content" class="main-btn">Let's Start !</a>
+                </div>
+            </div>
+            <div class="figure_img">
+                <div class="border_img">
+                    <img src="../ganyu.png" alt="ganyu">
+                </div>
+            </div>
+        </div>
+        <section id="main_content">
+            <div class="container reveal">
+                <h2>Latest Additions</h2>
+                <div class="cards" >
+                    <%figures.forEach(figure=>{%>
+                        <a href="/figure/<%=figure._id%>" class="text-card" style="background-image: url('<%=figure.images[0]%>');background-size: cover;
+                        background-repeat: no-repeat;">
+                            <div class="about_fig">
+                                <h3>Title</h3>
+                                <p><%=figure.name%></p>
+                                 </div>
+                        </a>
+                    <%})%>
+                    <%if(figures.length>=5){%>
+                        <a href="/figure/latest/1" class="more" >
+                            <h3>View More</h3>
+                        </a>
+                    <%}%>
+                </div>
+            </div>
+        </section>
+        <%if(months.length>0){%>
+        <section>
+            <div class="container reveal">
+                <h2>This Month Releases</h2>         
+                <div class="cards">
+                    <%months.forEach(month=>{%>
+                        <a href="/figure/<%=month._id%>" class="text-card" style="background-image: url('<%=month.images[0]%>');background-size: cover;
+                        background-repeat: no-repeat;">
+                            <div class="about_fig">
+                                <h3>Title</h3>
+                                <p><%=month.name%></p>
+                                 </div>
+                        </a>
+                    <%})%>
+                    <%if(months.length>=5){%>
+                        <a href="/figure/month/1" class="more" >
+                            <h3>View More</h3>
+                        </a>
+                    <%}%>
+                </div>
+            </div>
+        </section>
+        <%}%>
+        <%if(views.length>0){%>
+        <section>
+            <div class="container reveal">
+                <h2>Items on Fire</h2>
+                <div class="cards">
+                    <%views.forEach(view=>{%>
+                        <a href="/figure/<%=view._id%>" class="text-card" style="background-image: url('<%=view.figure[0]?.images[0]%>');background-size: cover;
+                        background-repeat: no-repeat;">
+                            <div class="about_fig">
+                                <h3>Title</h3>
+                                <p><%=view.figure[0]?.name%></p>
+                                 </div>
+                        </a>
+                    <%})%>
+                    <%if(views.length>=5){%>
+                        <a href="/figure/fires/1" class="more" >
+                            <h3>View More</h3>
+                        </a>
+                    <%}%>
+                </div>
+            </div>
+        </section>
+        <%}%>
+        <%if(recommends?.length>0){%>
+        <section>
+            <div class="container reveal">
+                <h2>You Might Like</h2>
+                <div class="cards">
+                    <%recommends.forEach(recommend=>{%>
+                        <a href="/figure/<%=recommend.figures._id%>" class="text-card" style="background-image: url('<%=recommend.figures?.images[0]%>');background-size: cover;
+                        background-repeat: no-repeat;">
+                            <div class="about_fig">
+                                <h3>Title</h3>
+                                <p><%=recommend.figures.name%></p>
+                                 </div>
+                        </a>
+                    <%})%>
+                </div>
+            </div>
+        </section>
+        <%}%>
+    </main>
+    </script>
+    <%-include('../partials/footer_main.ejs')%>

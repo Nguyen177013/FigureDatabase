@@ -1,0 +1,265 @@
+<%-include('../partials/header.ejs')%>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <%-include('../partials/nav.ejs')%>
+    <link type="text/css" rel="stylesheet" href="../style/magiczoomplus.css"/>
+        <link rel="stylesheet" href="../style/Detail_big.css">
+        <main>
+            <section class="detail_fig detail">
+                <div class="container flex_imgs col-2">
+                    <a href="<%=figure.images[0]%>" class="main_img MagicZoom" data-options="zoomWidth:250px; zoomHeight:250px" id="figure">
+                        <img src="<%=figure.images[0]%>" alt="">
+                    </a>
+                    <div class="sub_imgs">
+                        <%figure.images.forEach(img=>{%>
+                            <a href="<%=img%>" class="child_img"  data-zoom-id="figure">
+                                <img src="<%=img%>" alt="" class="img">
+                            </a>
+                            <%})%>
+                    </div>
+                </div>
+                <div class="container list_info">
+                    <div class="detail_fig">
+                        <div class="fig_info">
+                            <h3>Character</h3>
+                            <%figure.character.forEach(char=>{%>
+                                <a href="/character/<%=char._id%>">
+                                    <%=char.name%>
+                                </a>
+                                <%})%>
+                        </div>
+                        <div class="fig_info">
+                            <h3>From</h3>
+                            <a href="/origin/<%=figure.origin._id%>">
+                                <%=figure.origin.name%>
+                            </a>
+                        </div>
+                        <div class="fig_info">
+                            <h3>Viewer</h3>
+                            <a href="">
+                                <%=views%>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="detail_fig mt col">
+                        <div class="about_fig">
+                            <ul class="list_info">
+                                <li><strong>Category </strong>: <a href="/category/<%=figure.category._id%>">
+                                        <%=figure.category.name%>
+                                    </a></li>
+                                <li><strong>Artists</strong>:
+                                    <%figure.artists.forEach(art=>{%>
+                                        <a href="/artist/<%=art._id%>">
+                                            <%=art.name%>
+                                        </a>,
+                                        <%})%>
+                                </li>
+                                <li><strong>Version</strong>: <a href="">Astral Reflection Ver</a></li>
+                                <li><strong>Releases</strong>:<%=new Date(figure.release_date).toDateString()%></li>
+                                <li><strong>Materials</strong>:
+                                    <%figure.materials.forEach(mt=>{%>
+                                        <a href="/material/<%=mt._id%>">
+                                            <%=mt.name%>
+                                        </a>,
+                                        <%})%>
+                                </li>
+                                <li><strong>Price</strong>: ¥<a
+                                        href="https://www.google.com/search?q=<%=figure.price%>+JPY+IN+VND"
+                                        target="_blank">
+                                        <%=figure.price%>
+                                    </a>VND</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="detail_fig mt">
+                        <div class="follow_btn">
+                            <%if(!check){%>
+                            <div class="follow">
+                                <span>Follow</span> <span class="total">
+                                    <%=favorate%>
+                                </span>
+                            </div>
+                        <%}else{%>
+                            <div class="follow followed">
+                                <span>Followed</span> <span class="total">
+                                    <%=favorate%>
+                                </span>
+                            </div>
+                        <%}%>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="detail">
+                <div>
+                    <h2 class="title_menu">Companies Support</h2>
+                </div>
+                <div class="content">
+                    <div class="img_display">
+                        <%figure.company.forEach(com=>{%>
+                            <a href="<%=com.Homepage%>" class="company_logo"><img src="<%=com.image%>"
+                                    alt="<%=com.name%>"></a>
+                            <%})%>
+                    </div>
+                </div>
+            </section>
+            <%if(displayPost.length>0){%>
+            <section class="detail">
+                <div>
+                    <h2 class="title_menu">Comunity Images</h2>
+                    <div class="content">
+                        <div class="handle_img">
+                            <%displayPost.forEach(userPost=>{%>
+                                <div class="showcase_img">
+                                    <a href="/">
+                                        <img src="<%=userPost%>" alt="" loading="lazy">
+                                    </a>
+                                </div>
+                            <%})%>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <%}%>
+            <section class="detail">
+                <div>
+                    <h2 class="title_menu">Comment</h2>
+                </div>
+                <div class="content">
+                    <div class="cmt">
+                        <form class="comment_form">
+                            <textarea id="myTextarea" name="myTextarea" required></textarea>
+                            <div class="send-btn">
+                                <input type="submit" class="btn">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="coments">
+                        <%comments.forEach(comment=>{%>
+                        <div class="user_cmts">
+                            <div class="user_info mr">
+                                <div class="user_img">
+                                    <a href="/user/<%=comment.user._id%>" class="user">
+                                        <%if(comment.user.image.img_url){%>
+                                            <img src="<%=comment.user.image.img_url%>"
+                                                alt="" loading="lazy">
+                                        <%}else{%>
+                                            <img src="/detail/unknow.png" alt="">
+                                        <%}%>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="user_info">
+                                <div class="user_name">
+                                    <a href="/user/<%=comment.user._id%>">
+                                        <p class="name"><%=comment.user.username%></p>
+                                    </a>
+                                    <div class="time"><%=new Date(comment.dateComment).toDateString()%></div>
+                                </div>
+                                <div class="cmts">
+                                    <%-comment.title%>
+                                </div>
+                            </div>
+                        </div>
+                        <%})%>
+                    </div>
+                </div>
+            </section>
+        </main>
+    
+        <script type="text/javascript" src="/script/magiczoomplus.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        <script src="/ckeditor/ckeditor.js"></script>
+        <script src="/script/detailJS/slider.js"></script>
+        <script src="/script/detailJS/clickImg.js"></script>
+        <script src="/script/scroll.js"></script>
+        <script>
+            CKEDITOR.config.toolbarCanCollapse = true;
+            CKEDITOR.replace('myTextarea', {})
+        </script>
+        <script>
+           
+           let figId = '<%=figure.id%>';
+           let followBtn = document.querySelector('.follow');
+           let total = document.querySelector('.follow span');
+           let totalFollow = document.querySelector('.total');
+           followBtn.addEventListener('click', async function (e) {
+                let figId = '<%=figure.id%>';
+                let user = '<%=user?.id%>';
+                let res = await fetch('/favorate/add', {
+                    method: 'POST',
+                    body: JSON.stringify({ figId, user }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                const data = await res.json();
+                if (data.login) {
+                    window.location.href = '/signup/login';
+                }
+                if (data.add) {
+                    totalFollow.innerHTML = parseInt(totalFollow.innerText) + 1;
+                    total.innerText = "Followed" 
+                    followBtn.classList.add('followed');
+                    return;
+                }
+                if (data.remove) {
+                    totalFollow.innerHTML = parseInt(totalFollow.innerText) -1;
+                    total.innerText = "Follow"
+                    followBtn.classList.remove('followed');
+                    return;
+                }
+            })
+        </script>
+          <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
+            let handleComment =(data)=>{
+                let coments = document.querySelector('.coments');
+                let user_cmt = document.createElement('div');
+                user_cmt.classList.add('user_cmts');
+                let html = `
+                <div class="user_info mr">
+                                <div class="user_img">
+                                    <a href="/user/" class="user">
+                                        ${data.user?.image?.img_url?"<img src='"+data.user.image.img_url+"' alt=''>":"<img src='/detail/unknow.png' alt=''>"}  
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="user_info">
+                                <div class="user_name">
+                                    <a href="/user/">
+                                        <p class="name">${data.user.username}</p>
+                                    </a>
+                                    <div class="time">${new Date(data.dateComment).toLocaleString()}</div>
+                                </div>
+                                <div class="cmts">
+                                    ${data.title}
+                                </div>
+                            </div>
+                `
+                user_cmt.innerHTML = html;
+                coments.insertBefore(user_cmt,coments.firstChild);
+            }
+            let figure = '<%=figure.id%>';
+            let user = '<%=user?.id%>';
+            let form = document.querySelector('.comment_form');
+            socket.emit('user_rep',{figure,user});
+            socket.on('user_rep',data=>{
+                console.log(data);
+            })
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if(!user || user==null || user == ''){
+                    return window.location.href = '/signup/login'
+                }
+                    let title = CKEDITOR.instances.myTextarea.getData();
+                    socket.emit('comments',{figure,user,title});
+                    CKEDITOR.instances.myTextarea.setData('');
+            });
+            socket.on('comments',data=>{
+                handleComment(data);
+                console.log(data);
+            })
+        </script>
+        <%-include('../partials/footer.ejs')%>
