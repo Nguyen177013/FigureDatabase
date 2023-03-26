@@ -1,0 +1,134 @@
+<%-include('../partials/header.ejs')%>
+    <link rel="stylesheet" href="../style/social.css">
+    <link rel="stylesheet" href="../style/profile.css">
+    <%-include('../partials/nav.ejs')%>
+    <main>
+        <div class="container">
+            <div class="profile_form">
+                <div class="user_profile">
+                    <div class="user_info">
+                        <div class="profile_img">
+                            <div class="img">
+                                    <%if(userd.image.img_url){%>
+                                        <img src="<%=userd.image.img_url%>"
+                                            alt="">
+                                    <%}else{%>
+                                        <img src="/detail/unknow.png" alt="">
+                                    <%}%>
+                                <form action="/user/update/<%=user.id%>", method="POST" enctype="multipart/form-data">
+                                    <label for="change">
+                                        <%if(userd._id == user.id){%>
+                                        <div class="change_ava">
+                                                <div class="change_title">
+                                                    <p>Change avatar</p>
+                                                </div>
+                                                <input id="change" type="file" name="img" onchange="displayImg()">
+                                        </div>   
+                                        <%}%> 
+                                        <div class="change_img">
+                                            <input type="submit" name="img" class="btn_change">
+                                        </div>
+                                </label>
+                            </form>
+                            </div>
+                        </div>
+                        <div class="user_name">
+                            <h2><%=userd.username%></h2>
+                        </div>
+                        <div class="user_name">
+                            <p>Joined in <%=moment(userd.dateCreate).format('Do MMMM YYYY')%></p>
+                        </div>
+                        <%if(userd._id!=user.id){%>
+                        <div class="btnOption">
+                            <div class="follow">
+                                <a href="">Follow</a>
+                            </div>
+                            <div class="message">
+                                <a>Message</a>
+                            </div>
+                        </div>
+                        <%}else if(user.vip){%>
+                            <div class="user_name">
+                               <strong class="vip-expire">VIP expire in:<p class="vip-expire target"><%=new Date(user.vip.expireAt).toDateString()%></p></strong>
+                            </div>
+                        <%}%>
+
+                    </div>
+                    <div class="user_posts">
+                        <div class="figures">
+                            <h2>User Posts</h2>
+                            <div class="list_posts">
+                                <%posts.forEach(post=>{%>
+                                    <div class="user_post" data-id="<%=post.id%>">
+                                        <div class="form_post list_post">
+                                            <div class="about_user">
+                                                <div class="option_img user_img">
+                                                    <%if(post.user.image.img_url){%>
+                                                        <img src="<%=post.user.image.img_url%>"
+                                                            alt="">
+                                                    <%}else{%>
+                                                        <img src="/detail/unknow.png" alt="">
+                                                    <%}%>
+                                                </div>
+                                                <div class="user_info">
+                                                    <span><%=post.user.username%></span>
+                                                    <p class="time_line"><%=moment(post.dayPost).format('Do MMMM, YYYY')%></p>
+                                                </div>
+                                                <%if(post.user.id == user.id){%>                                    
+                                                    <div class="post_option">
+                                                        <div class="option_btn">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                              </svg>
+                                                                
+                                                            </div>
+                                                    </div>  
+                                                    <%}%>
+                                            </div>
+                                            <div class="userTitle">
+                                                <%=post.title%>
+                                            </div>
+                                            <div class="main_img">
+                                                <%post.images.forEach(image=>{%>
+                                                    <div class="user_imgs">
+                                                        <img src="<%=image.url%>" alt="">
+                                                    </div>    
+                                                <%})%>
+                                            </div>
+                                        </div>
+                                    </div>                                
+                                <%})%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        let userSend = '<%=user.id%>';
+        let userGet = '<%=userd.id%>';
+        let pro_img = document.querySelector('.img img');
+        let file = document.querySelector('#change');
+        let btn = document.querySelector('.change_img');
+        async function displayImg() {
+        let [image] = file.files;
+        pro_img.src = URL.createObjectURL(image);
+        btn.classList.add('show');
+}
+</script>
+<script>
+    let message = document.querySelector('.message');
+    message.addEventListener('click',async function(e){
+        let req = await fetch('/message/addList',{
+            method:"POST",
+            body: JSON.stringify({userSend,userGet}),
+            headers:{'Content-Type': 'application/json'}
+        })
+        let data = await req.json();
+        console.log(data);
+        window.location.href = `/message/${data.success}`
+    });
+</script>
+<script src="/script/handleDelete.js"></script>
+<%-include('../partials/footer.ejs')%>
