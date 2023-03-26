@@ -31,6 +31,7 @@ class commentController {
             let info = await postComment.findById(data._id).populate('user');
             res.json({ comment: info })
         } catch (ex) {
+
             console.log(ex.message);
         }
     }

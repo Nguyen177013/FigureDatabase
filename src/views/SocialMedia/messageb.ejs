@@ -1,0 +1,114 @@
+<%-include('../partials/header.ejs')%>
+    <link rel="stylesheet" href="../style/social.css">
+    <style>
+        main{
+            height: calc(100vh - 4.5rem);
+        }
+        .user{
+    display: flex;
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px 10px;
+    transition: all 0.2s;
+    border-radius: 10px;
+}
+.user:hover{
+    background-color: #3c445a;
+}
+.message_body{
+    flex: 6;
+}
+.list_message{
+    width: 25rem;
+}
+.message_name{
+}
+.main_message{
+    font-size: 15px;
+    color: #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.left_menu{
+    flex: 0.6;
+    border-right: 1px solid #ccc;
+}
+.poster{
+    flex: 1;
+    border-right: 1px solid #ccc;
+}
+.message{
+    flex: 2;
+}
+    </style>
+    <%-include('../partials/nav.ejs')%>
+    <main>
+        <div class="social_media">
+            <%-include('../partials/user_option.ejs')%>
+            <div class="poster">
+                <div class="contain">
+                    <div class="list_message">
+                        <%users.forEach(u=>{%>                
+                                <a href="/message/<%=u.userGet._id%>" class="form_post">
+                                    <div class="option_img">
+                                        <%if(u.userGet?.image.img_url){%>
+                                            <img src="<%=u.userGet?.image.img_url%>" alt="">
+                                        <%}else{%>
+                                                <img src="/detail/unknow.png" alt="">
+                                        <%}%>
+                                    </div>
+                                <div class="message_name">
+                                    <p class="form_post">
+                                        <span><%=u.userGet.username%></span>
+                                    </p>
+                                </div>
+                            </a>     
+                        <%})%>
+                    </div>
+                </div>
+            </div>
+            <div class="message">
+                <div class="main_message">
+                    <div class="header_message">
+                        <a href="/user/<%=userChat.id%>" class="header_message">
+                        <div class="option_img">
+                            <%if(userChat.image.img_url){%>
+                                <img src="<%=userChat.image.img_url%>" alt="">
+                            <%}else{%>
+                                    <img src="/detail/unknow.png" alt="">
+                            <%}%>
+                        </div>
+                        <div class="option_name">
+                                <span><%=userChat.username%></span>
+                        </div></a>
+                    </div>
+                    <div class="message_body">
+                        <%messageSend.forEach(mess=>{%>
+                            <%if(mess.userSend == user.id){%>
+                                <div class="user_send">
+                                    <p class="send"><%=mess.message%></p>
+                                </div>    
+                                <%}else{%>
+                                    <div class="user_get">
+                                        <p class="get"><%=mess.message%></p>
+                                    </div>    
+                                <%}%> 
+                        <%})%>
+                    </div>
+                    <form id="send-container">
+                        <input type="text" id="message-input">
+                        <button type="submit" id="send-button">Send</button>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let userSend = '<%=user._id%>' 
+        let userGet = '<%=userChat.id%>';
+        
+    </script>
+    <script src="/script/socketHandle.js"></script>
+<%-include('../partials/footer.ejs')%>

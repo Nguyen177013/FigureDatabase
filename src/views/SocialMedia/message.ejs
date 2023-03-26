@@ -1,0 +1,83 @@
+<%-include('../partials/header.ejs')%>
+    <link rel="stylesheet" href="../style/social.css">
+    <style>
+        main{
+            height: calc(100vh - 4.5rem);
+        }
+        .user{
+    display: flex;
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px 10px;
+    transition: all 0.2s;
+    border-radius: 10px;
+}
+.user:hover{
+    background-color: #3c445a;
+}
+.message_body{
+    flex: 6;
+}
+.list_message{
+    width: 25rem;
+}
+.main_message{
+    font-size: 15px;
+    color: #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.left_menu{
+    flex: 0.6;
+    border-right: 1px solid #ccc;
+}
+.poster{
+    flex: 2;
+    border-right: 1px solid #ccc;
+}
+.message{
+    flex: 2;
+}
+    </style>
+    <%-include('../partials/nav.ejs')%>
+    <main>
+        <div class="social_media">
+            <%-include('../partials/user_option.ejs')%>
+            <div class="poster">
+                <div class="contain">
+                    <div class="list_message">
+                        <%list.forEach(u=>{%>                
+                                <a href="/message/<%=u.userGet._id%>" class="form_post">
+                                    <div class="option_img">
+                                        <%if(u.userGet?.image?.img_url){%>
+                                            <img src="<%=u.userGet.image.img_url%>" alt="">
+                                        <%}else{%>
+                                                <img src="/detail/unknow.png" alt="">
+                                        <%}%>
+                                    </div>
+                                <div class="message_name">
+                                    <p class="form_post">
+                                        <span><%=u.userGet.username%></span>
+                                    </p>
+                                    
+                                </div>
+                            </a>     
+                        <%})%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let user = '<%=user.id%>';
+        socket.emit('user-connect',{user});
+        socket.on('user-connect',data=>{
+        let status = document.querySelector(`[data-user~="${data}"]`);
+        if(status)
+        status.innerText ="online"
+        })
+    </script>
+<%-include('../partials/footer.ejs')%>

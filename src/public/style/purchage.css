@@ -1,0 +1,42 @@
+body{
+    gap: 24px;
+    animation-name: lift-up;
+    animation-duration: 1s;
+}.purchage{
+    background-color: #fff;
+    width: 22rem;
+    height: 20rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+.header{
+    width: 100%;
+    background-color: rgb(17, 96, 206);
+    color: #fff;
+    text-align: center;
+}
+.about{
+
+}
+.purchage button{
+    margin-bottom: 25px;
+    width: 10rem;
+    border: none;
+    color: #fff;
+    background-color:  rgb(17, 96, 206);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .2s;
+}
+.purchage button:hover{
+    padding: 15px 25px;
+    font-weight: 600;
+}
+.pro{
+    background-color: rgb(228, 204, 46) !important;
+}

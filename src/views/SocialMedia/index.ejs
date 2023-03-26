@@ -1,0 +1,376 @@
+<%-include('../partials/header.ejs')%>
+    <link rel="stylesheet" href="../style/social.css">
+    <%-include('../partials/nav.ejs')%>
+        <main>
+            <div class="loading">
+                <div class="lds-dual-ring"></div>
+            </div>
+            <div class="social_media">
+                <%-include('../partials/user_option.ejs')%>
+                <div class="poster">
+                    <div class="contain">
+                        <div class="user_post">
+                            <form action="/figure-wiki/post" method="POST" enctype="multipart/form-data"
+                            onsubmit="loading();">
+                                <div class="form_post">
+                                    <div class="option_img user_img">
+                                        <%if(user.image.img_url){%>
+                                            <a href="">
+                                                <img src="<%=user.image.img_url%>"alt="">
+                                            </a>
+                                        <%}else{%>
+                                            <a href="">
+                                                <img src="/detail/unknow.png" alt="">
+                                            </a>
+                                        <%}%>
+                                    </div>
+                                    <div class="user_text">
+                                        <textarea rows="4" cols="50" name="body"
+                                            placeholder="Describe post here..." required></textarea>
+                                    </div>
+                                </div>
+                                <div class="image_showcase">
+                                </div>
+                                <div class="form_option">
+                                    <div class="option_img user_img">
+                                        <label for="file_input">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-6 h-6">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </label>
+                                        <input type="file" id="file_input" style="display: none;" multiple name = "img"
+                                            onchange="displayImg();">
+                                    </div>
+                                    <div class="selection">
+                                        <select class="origin" name="origin" onchange="enableChar();">
+                                            <option selected value="0" class="select_org">Figure Characters ...</option>
+                                            <%characters.forEach(character=>{%>
+                                                <option value="<%=character._id%>">
+                                                    <%=character.name%>
+                                                </option>
+                                                <%})%>
+                                        </select>
+                                    </div>
+                                    <div class="selection">
+                                        <select class="character" name="Character" onchange="enableButton();">
+                                            <option selected value="0" class="select_char">Figure Char ...</option>
+                                        </select>
+                                    </div>
+                                    <div class="selection">
+                                        <select class="privacy" name="privacy">
+                                            <option selected value="false" class="select_char">Public</option>
+                                            <option value="true" class="select_char">Private</option>
+                                        </select>
+                                    </div>
+                                    <div class="send_post">
+                                        <button type="submit" class="send_btn">
+                                            post
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="list_posts">
+                            <%posts.forEach(post=>{%>
+                                <%if(post.privacy){%> 
+                                    <%if(check || (post.user.id == user.id)){%>
+                                <div class="user_post" data-id="<%=post.id%>">
+                                <div class="form_post list_post">
+                                    <div class="about_user">
+                                        <div class="option_img user_img">
+                                            <%if(post.user.image.img_url){%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="<%=post.user.image.img_url%>"alt="">
+                                                </a>
+                                            <%}else{%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="/detail/unknow.png" alt="">
+                                                </a>
+                                            <%}%>
+                                        </div>
+                                        <div class="user_info">
+                                            <a href="/user/<%=post.user._id%>"><%=post.user.username%></a>
+                                            <p class="time_line"><%=new Date(post.dayPost).toDateString()%></p>
+                                        </div>
+                                        <%if(post.user.id == user.id){%>                                    
+                                        <div class="post_option">
+                                            <div class="option_btn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                  </svg>
+                                                    
+                                                </div>
+                                        </div>  
+                                        <%}%>
+                                    </div>
+                                    <div class="userTitle">
+                                        <%=post.title%>
+                                    </div>
+                                    <div class="main_img">
+                                        <%post.images.forEach(image=>{%>
+                                            <div class="user_imgs">
+                                                <img src="<%=image.url%>"
+                                                    alt="">
+                                            </div>
+                                        <%})%>
+                                    </div>
+                                </div>
+                                <div class="form_favorate">
+                                    <div class="favorate_btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                          </svg>
+                                        <%if(post?.favorate){%>
+                                            <span><%=post?.favorate%></span>
+                                        <%}else{%>
+                                            <span>0</span>
+                                        <%}%>
+                                    </div>
+                                </div>
+                                <div class="form_comment">
+                                    <div class="user_cmt">
+                                        <div class="option_img">
+                                            <%if(user.image.img_url){%>
+                                                <a href="/user/<%=user._id%>">
+                                                    <img src="<%=user.image.img_url%>"alt="">
+                                                </a>
+                                            <%}else{%>
+                                                <a href="/user/<%=user._id%>">
+                                                    <img src="/detail/unknow.png" alt="">
+                                                </a>
+                                            <%}%>
+                                        </div>
+                                        <div class="cmt">
+                                            <form>
+                                                <textarea rows="4" cols="50" placeholder="Comment here..." class="text_comment" onkeypress="submit_form(event);"></textarea>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="list_comments">
+                                        <%if(post.comments.length > 0){%>
+                                            <%post.comments.forEach(comment=>{%>
+                                            <div class="about_user">
+                                                <div class="option_img comment_img">
+                                                        <%if(comment.user.image.img_url){%>
+                                                            <a href="/user/<%=post.user._id%>">  
+                                                                <img src="<%=comment.user.image.img_url%>" alt="">
+                                                            </a>
+                                                        <%}else{%>
+                                                            <a href="/user/<%=post.user._id%>">
+                                                                <img src="/detail/unknow.png" alt="">
+                                                            </a>
+                                                        <%}%>
+                                                </div>
+                                                <div class="user_cmts cmts">
+                                                    <div class="user_name">
+                                                        <%=comment.user.username%>
+                                                    </div>
+                                                    <div class="cmt">
+                                                        <p>
+                                                            <%=comment.title%>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                            <%})%>                                             
+                                        <%}%>
+                                    </div>
+                                </div>
+                                </div>   
+                            <%}else{%>
+                             <div class="user_post" data-id="<%=post.id%>">
+                                <div class="form_post list_post">
+                                    <div class="about_user">
+                                        <div class="option_img user_img">
+                                            <%if(post.user.image.img_url){%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="<%=post.user.image.img_url%>"alt="">
+                                                </a>
+                                            <%}else{%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="/detail/unknow.png" alt="">
+                                                </a>
+                                            <%}%>
+                                        </div>
+                                        <div class="user_info">
+                                            <a href="/user/<%=post.user._id%>"><%=post.user.username%></a>
+                                            <p class="time_line"><%=new Date(post.dayPost).toDateString()%></p>
+                                        </div>
+                                        <%if(post.user.id == user.id){%>                                    
+                                        <div class="post_option">
+                                            <div class="option_btn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                  </svg>
+                                                    
+                                                </div>
+                                        </div>  
+                                        <%}%>
+                                    </div>
+                                    <div class="userTitle">
+                                        <%=post.title%>
+                                    </div>
+                                        <div class="secret_img">    
+                                            <div class="btn_secret">
+                                                <a href="/purchage">Be come a Pro</a>
+                                            </div>
+                                            <div class="main_img blur_img">
+                                                <%post.images.forEach(image=>{%>
+                                                    <div class="user_imgs">
+                                                        <img src="<%=image.url%>"
+                                                            alt="">
+                                                    </div>
+                                                <%})%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   
+                            <%}%>
+                                <%} else{%>
+                                    <div class="user_post" data-id="<%=post.id%>">
+                                        <div class="form_post list_post">
+                                            <div class="about_user">
+                                                <div class="option_img user_img">
+                                                    <%if(post.user.image.img_url){%>
+                                                        <a href="/user/<%=post.user._id%>">
+                                                            <img src="<%=post.user.image.img_url%>"alt="">
+                                                        </a>
+                                                    <%}else{%>
+                                                        <a href="/user/<%=post.user._id%>">
+                                                            <img src="/detail/unknow.png" alt="">
+                                                        </a>
+                                                    <%}%>
+                                                </div>
+                                                <div class="user_info">
+                                                    <a href="/user/<%=post.user._id%>"><%=post.user.username%></a>
+                                                    <p class="time_line"><%=new Date(post.dayPost).toDateString()%></p>
+                                                </div>
+                                                <%if(post.user.id == user.id){%>                                    
+                                                <div class="post_option">
+                                                    <div class="option_btn">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                          </svg>
+                                                            
+                                                        </div>
+                                                </div>  
+                                                <%}%>
+                                            </div>
+                                            <div class="userTitle">
+                                                <%=post.title%>
+                                            </div>
+                                            <div class="main_img">
+                                                <%post.images.forEach(image=>{%>
+                                                    <div class="user_imgs">
+                                                        <img src="<%=image.url%>"
+                                                            alt="" loading="lazy">
+                                                    </div>
+                                                <%})%>
+                                            </div>
+                                        </div>
+                                        <div class="form_favorate">
+                                            <div class="favorate_btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                                <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                              </svg>
+                                              
+                                              <%if(post?.favorate){%>
+                                                <span><%=post?.favorate%></span>
+                                            <%}else{%>
+                                                <span>0</span>
+                                            <%}%>
+                                            </div>
+                                        </div>
+                                        <div class="form_comment">
+                                            <div class="user_cmt">
+                                                <div class="option_img">
+                                                    <%if(user.image.img_url){%>
+                                                        <a href="/user/<%=user._id%>">
+                                                            <img src="<%=user.image.img_url%>"alt="">
+                                                        </a>
+                                                    <%}else{%>
+                                                        <a href="/user/<%=user._id%>">
+                                                            <img src="/detail/unknow.png" alt="">
+                                                        </a>
+                                                    <%}%>
+                                                </div>
+                                                <div class="cmt">
+                                                    <form>
+                                                        <textarea rows="4" cols="50" placeholder="Comment here..." class="text_comment" onkeypress="submit_form(event);"></textarea>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="list_comments">
+                                                <%if(post.comments.length > 0){%>
+                                                    <%post.comments.forEach(comment=>{%>
+                                                    <div class="about_user">
+                                                        <div class="option_img comment_img">
+                                                                <%if(comment.user.image.img_url){%>
+                                                                    <a href="/user/<%=post.user._id%>">  
+                                                                        <img src="<%=comment.user.image.img_url%>" alt="">
+                                                                    </a>
+                                                                <%}else{%>
+                                                                    <a href="/user/<%=post.user._id%>">
+                                                                        <img src="/detail/unknow.png" alt="">
+                                                                    </a>
+                                                                <%}%>
+                                                        </div>
+                                                        <div class="user_cmts cmts">
+                                                            <div class="user_name">
+                                                                <%=comment.user.username%>
+                                                            </div>
+                                                            <div class="cmt">
+                                                                <p>
+                                                                    <%=comment.title%>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>   
+                                                    <%})%>                                             
+                                                <%}%>
+                                            </div>
+                                        </div>
+                                        </div> 
+                                <%}%>
+                            <%})%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            let load = document.querySelector('.loading');
+            function loading(){
+                load.style.display = 'flex';
+            }
+            let userId = '<%=user.id%>';
+            let favorate_btn = document.querySelectorAll('.favorate_btn svg');
+            favorate_btn.forEach((ele)=>{
+                ele.addEventListener('click', async function(e){
+                    let target = e.target;
+                    let postId = target.parentNode.parentNode.parentNode.parentNode.dataset.id;
+                    console.log(postId);
+                    let req = await fetch('/favorate/add/post',{
+                        method:"POST",
+                        body: JSON.stringify({userId,postId}),
+                        headers:{'Content-Type': 'application/json'}
+                    })
+                    let res = await req.json();
+                    if(res.delete){
+                        ele.classList.remove('favorated');
+                        target.parentNode.parentNode.childNodes[2].innerHTML = parseInt(target.parentNode.parentNode.childNodes[2].innerText) -1;                   
+                    }
+                    else{
+                        ele.classList.add('favorated')
+                        target.parentNode.parentNode.childNodes[2].innerHTML = parseInt(target.parentNode.parentNode.childNodes[2].innerText)+1;
+                    }
+                })
+            })
+        </script>
+        <script src="/script/handlePost.js"></script>
+        <script src="/script/commentHandle.js"></script>
+        <script src="/script/handleDelete.js"></script>
+        <%-include('../partials/footer.ejs')%>

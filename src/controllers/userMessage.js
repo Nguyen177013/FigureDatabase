@@ -4,6 +4,7 @@ const Account = require('../models/account');
 // const cloudinary = require('./cloudinary');
 const Message = require('../models/message');
 const listMessage = require('../models/messageList');
+
 class messageController {
     async message_get(req, res) {
         let userSend = res.locals.user.id;
@@ -49,6 +50,7 @@ class messageController {
             await Message.create(data);
             res.json({ success: 1 });
         } catch (ex) {
+
             res.json(undefined);
         }
     }

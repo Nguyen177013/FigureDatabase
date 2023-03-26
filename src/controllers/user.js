@@ -56,11 +56,13 @@ class userController {
             const token = createToken(user._id);
             res.cookie('user', token, { httpOnly: true, maxAge: maxAge * 1000 });
             res.status(201).json({ user: user.username });
+
         } catch (ex) {
             let err = handleError(ex);
             res.status(401).json({ err });
         }
     }
+
     facebookLoggin(req, res, next) {
         passport.authenticate('facebook', { failureRedirect: '/signup/login', failureMessage: true }, async function(err, user, info) {
                 let facebookId = user.id
@@ -117,6 +119,7 @@ class userController {
             const user = await Account.create(data);
             res.status(201).json({ user: user._id });
         } catch (ex) {
+
             let err = handleError(ex);
             res.status(401).json({ err });
         }

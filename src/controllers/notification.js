@@ -7,6 +7,7 @@ class notificationController {
             let result = await notificate.remove({ user: id });
             res.json(result)
         } catch (ex) {
+
             console.log(ex.message);
         }
     }
