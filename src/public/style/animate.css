@@ -1,0 +1,119 @@
+@keyframes slide-up{
+    from{
+        width: 0;
+    }
+    to{
+        width: 100%;
+    }
+}
+@keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+@keyframes lift-up{
+    from{
+        transform: translateY(15px);
+        opacity: 0;
+    }
+    to{
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes show_content {
+    0% {
+        transform: translate(-50%, -500%);
+        font-size: 10px;
+        opacity: 0;
+        filter: blur(33px);
+    }
+    50%{
+        transform: translate(-50%, -40%);
+        font-size: 40px;
+        opacity: 1;
+        filter: blur(0px);
+    }
+    100%{
+        font-size: 45px;
+        opacity: 1;
+        filter: blur(0px);
+        transform: translate(-80%, -40%);
+    }
+}
+@keyframes show{
+    0%{
+        filter: blur(3px);
+        opacity: 0;
+    }
+    50%{
+        background-position: -5px 15px;
+        filter: blur(1px);
+        opacity: 0.5;
+    }
+    100%{
+        background-position: -5px 20px;
+        filter: blur(3px);
+        opacity: 0;
+    }
+}
+@keyframes aboutFig{
+    from{
+        filter: blur(3px);
+        top: 70%;
+    }
+    to{
+        filter: blur(0px);
+        opacity: 1;
+        top: 57%;
+    }
+}
+@keyframes startFig{
+    from{
+        filter: blur(3px);
+        bottom: 0%;
+    }
+    to{
+        filter: blur(0px);
+        opacity: 1;
+        bottom: 15%;
+    }
+}
+@keyframes rotate{
+    from{
+        opacity: 0;
+        transform: rotate(0);
+    }
+    to{
+        opacity: 1;
+        transform: rotate(360deg);
+    }
+}
+@keyframes border_up{
+    from{
+        height: 0;
+    }
+    to{
+        height: 100%;
+    }
+}
+@keyframes show_toast{
+    from{
+        opacity: 0;
+        transform: translateX(405px);
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+}
+@keyframes hide_toast {
+    to{
+        opacity: 0;
+    }
+}

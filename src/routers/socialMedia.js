@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const media = require('../controllers/userPost');
+const upload = require('./multer');
+const comment = require('../controllers/comment');
+const {checkUser,requireAuth} = require('../middleware/authorization');
+router.get('/',requireAuth,media.index);
+router.get('/favorates',media.listFavorate);
+router.post('/post',checkUser,upload.array('img',10),media.post);
+router.post('/remove',media.remove);
+router.post('/comment',comment.postsComment);
+module.exports = router;
