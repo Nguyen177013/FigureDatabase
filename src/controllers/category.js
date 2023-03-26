@@ -5,7 +5,7 @@ class cateController{
     async figCate(req,res){
         let cateId = req.params.id;
         let figure = await Figure.find({category: cateId});
-        res.json({figures: figure});
+        res.render('Category/items',{figures: figure});
     }
 }
 
