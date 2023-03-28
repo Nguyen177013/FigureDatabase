@@ -7,7 +7,7 @@ const paymentSchema = new mongoose.Schema({
     },
     price:{
         type:String,
-        default: '25000'
+        default: '250000'
     },
     datePurchage:{
         type:Date,

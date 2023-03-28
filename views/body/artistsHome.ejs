@@ -1,0 +1,64 @@
+<%-include('../partials/header.ejs')%>
+<link href="/popup.css" rel="stylesheet">
+<script defer src="/script/popup.js"></script>
+    <%-include('../partials/nav.ejs')%>
+    <!-- porducts -->
+        <div class="blogs content">
+            <button data-modal-target="#modal">Thêm artist</button>
+            <div class="modal" id="modal">
+              <div class="modal-header">
+                <div class="title">Thêm artist</div>
+                <button data-close-button class="close-button">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form action="/artistsHome" method="POST" enctype="multipart/form-data" >
+                    <div class="control-label col-md-2">Tên artist:</div>
+                    <input type="text" name="name" required>
+                    
+                   
+                   
+                   <div class="control-label col-md-2">FanPage:</div>
+                   <input type="text" name="Homepage">
+                   <br>
+                   
+                   
+                   <div class="control-label col-md-2">Hình ảnh:</div>
+                    <input type="file" name = "img">
+                   
+                    
+                    <input type="submit">
+                </form>
+              </div>
+            </div>
+            <div id="overlay"></div>
+                    
+                    <div class="col l-3">
+                        <%artists.forEach(artists=>{%>
+                            <a href="/artistsDetail/<%=artists._id%>" class="home-product-item">
+                                <div class="flip-card">
+                                    <div class="flip-card__inner">
+                                        <div class="flip-card__front">
+                                            <div class="home-product-item__img" style="background-image: url(<%=artists.image%>);"></div>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                <h4 class="home-product-item__name"><%=artists.name%></h4>
+                                <!-- <div class="home-product-item__price">6.000.000VND</div> -->
+                                <button class="btn home-product-item__add">Xem thêm</button>
+                            </a>
+                        <%})%>
+                      
+                    </div>
+
+
+                   
+        </div>
+        <div class="pagination">
+        </div>
+        <style>
+            footer{
+                background-color: #fff;
+            }
+        </style>
+        <%-include('../partials/footer.ejs')%>

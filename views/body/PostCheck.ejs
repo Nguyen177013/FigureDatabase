@@ -1,0 +1,77 @@
+<%-include('../partials/header.ejs')%>
+<link href="/popup.css" rel="stylesheet">
+<script defer src="/script/popup.js"></script>
+<link href="/style.css" rel="stylesheet">
+<link href="/table.css" rel="stylesheet">
+    <%-include('../partials/nav.ejs')%>
+    <div class="find">
+        <label for="findPost">Tìm Kiếm</label>
+        <input id="findpost" type="text" onkeydown="findPost();">
+    </div>
+<table style="margin-top:10px" class="table">
+    <tr>
+        <th>
+            UID:
+        </th>
+        <th>
+            Name:
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+           Image:
+        </th>
+      
+       
+        <th></th>
+    </tr>
+    <%data.Social.forEach(Account=>{%> 
+    <tr>
+             <td>
+                 <%=Account.user.id%>
+             </td>
+            <td>
+                <a href="/user/<%=Account.user.id%>" style="color: #7E7F9A;"><%=Account.user.username%></a>
+             </td>
+            <td>
+                <%=Account.title%>
+            </td>
+            <td>
+                <div class="image_display">
+                    <img src="<%=Account.images[0].url%>" alt="">
+                </div>
+            </td>
+            <td>
+                <div class="post_option">
+                    <div class="option_btn" data-id="<%=Account.id%>">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                            
+                        </div>
+                </div>  
+            </td>
+       
+                        <%})%>
+    </tr>
+</table>    
+<script src="/script/findPost.js"></script>
+    <script>
+        let option_btn = document.querySelectorAll('.option_btn');
+        option_btn.forEach(post=>{
+            post.addEventListener('click',async function(e){
+                let postId = post.dataset.id;
+                let req = await fetch('/user/remove',{
+                    method:'POST',
+                    body: JSON.stringify({postId}),
+                    headers:{'Content-Type': 'application/json'}
+                })
+                let res = await req.json();
+                if(res.success){
+                    window.location.reload();
+                }
+            })
+        })
+    </script>
+    <%-include('../partials/footer.ejs')%>

@@ -1,0 +1,66 @@
+<%-include('../partials/header.ejs')%>
+    <%-include('../partials/nav.ejs')%>
+    <link rel="stylesheet" href="css/virtual-select.min.css">
+    <style>
+        div{
+            font-size: 1.4rem;
+            display: inline;
+        }
+        select{
+            
+            margin: 0.8rem 0;
+            width: 17.5rem;
+            height: 3rem;
+        }
+        form{
+            width: 955px;
+        }
+    </style>
+    <form action="/add" method="POST" enctype="multipart/form-data" >
+        <div class="control-label col-md-2">Tên figure:</div>
+        <input type="text" name="name" required>
+        <div class="control-label col-md-2">Loại:</div>
+       <select name="category" id="">
+            <%data.categories.forEach(category=>{%>
+                <option value="<%=category._id%>"><%=category.name%></option>
+            <%})%>
+       </select>
+       <div class="control-label col-md-2">Xuất hiện trong:</div>
+       <select name="origin" id="">
+            <%data.origins.forEach(origin=>{%>
+                <option value="<%=origin._id%>"><%=origin.name%></option>
+            <%})%>
+       </select>
+       <div class="control-label col-md-2">Nhân vật:</div>
+       <select name="character" id="">
+            <%data.characters.forEach(character=>{%>
+                <option value="<%=character._id%>"><%=character.name%></option>
+            <%})%>
+       </select>
+       <div class="control-label col-md-2">Công ty:</div>
+       <select name="company" id="">
+            <%data.companies.forEach(companie=>{%>
+                <option value="<%=companie._id%>"><%=companie.name%></option>
+            <%})%>
+       </select>
+       <br>
+       <div class="control-label col-md-2">Người thiết kế:</div>
+       <select name="artists" id="">
+            <%data.artists.forEach(artist=>{%>
+                <option value="<%=artist._id%>"><%=artist.name%></option>
+            <%})%>
+       </select>
+       <div class="control-label col-md-2">Chất liệu:</div>
+       <select name="materials" id="">
+            <%data.materials.forEach(material=>{%>
+                <option value="<%=material._id%>"><%=material.name%></option>
+            <%})%>
+       </select>
+       <div class="control-label col-md-2">Hình ảnh:</div>
+        <input type="file" name = "img" multiple required>
+        <div class="control-label col-md-2">Giá tiền:</div>
+        <input type="text" placeholder="price" name="price">
+        <input type="submit">
+    </form>
+    <script src="script/virtual-select.min.js"></script>
+    <%-include('../partials/footer.ejs')%>

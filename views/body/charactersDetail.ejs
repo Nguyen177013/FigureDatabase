@@ -1,0 +1,94 @@
+<%-include('../partials/header.ejs')%>
+<link href="/popup.css" rel="stylesheet">
+<script defer src="/script/popup.js"></script>
+    <%-include('../partials/nav.ejs')%>
+    <!-- porducts -->
+    <div class="grid wide">
+        <div class="row">
+            <section class="product">
+                <button data-modal-target="#modal">Chỉnh sửa</button>
+                <div class="modal" id="modal">
+                  <div class="modal-header">
+                    <div class="title">Chỉnh sửa nhân vật</div>
+                    <button data-close-button class="close-button">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="/editChar/<%=characters._id%>" method="POST" enctype="multipart/form-data" >
+                        <div class="control-label col-md-2">Tên nhân vật:</div>
+                        <input type="text" name="name" value="<%=characters.name%>" required>
+                        
+                        <div class="control-label col-md-2">Xuất hiện trong:</div>
+                       <select name="origin" id="">
+                            <%data.origins.forEach(origin=>{%>
+                                <option value="<%=origin._id%>"><%=origin.name%></option>
+                            <%})%>
+                       </select>
+                       <br>
+                       <div class="control-label col-md-2">Hình ảnh:</div>
+                        <input type="file" name = "img" multiple>
+                        <div class="control-label col-md-2">Tên gốc:</div>
+                        <input type="text" name="original" value="<%=characters.original%>">
+                        <input type="submit">
+                    </form>
+                  </div>
+                </div>
+                <div id="overlay"></div>
+                <div class="product-content row">
+                    <div class="product-content-left-big-img">
+                        <img src="<%=characters.image%>" alt="">
+                    </div>
+                    <div class="product-content-right">
+                        <div class="product-content-right-product-name">
+                            <h1>
+                              <br> Tên nhân vật:<%=characters.name%></h1></br>
+                            </h1>
+                        </div>
+
+                        <div class="product-content-right-product-name">
+                            <h1>
+                              <br>Tên gốc:<%=characters.original%></br>
+                              
+                            </h1>
+                        </div>
+                        <div class="product-content-right-product-name">
+                            <%if(characters.origin){%>
+                                <h1>
+                                    <br> Xuất hiện trong: 
+                                    <a href="/origin/<%=characters?.origin._id%>">
+                                        <%=characters?.origin.name%>
+                                        </a>      </br>
+                                        
+                                        </h1>
+                                    <%}%>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="product">
+                <div class="product-content-right">
+                    <div class="product-content-right-product-name">
+                        </div>
+                        
+
+                       
+                        <h1>Một số figures <%=characters.name%> khác:</h1>
+                        <!-- Tạo vòng lặp figure theo thông tin figures:figures -->
+                        
+                        <%figures.forEach(fig=>{%>
+                            <!-- tạo thẻ a để vào chi tiết figure theo ID -->
+                            <a href="/detail/<%=fig._id%>">
+                                <!--  -->
+                                <img src="<%=fig.images[0]%>" alt="" style="width: 70px;
+                            height: 70px;
+                            object-fit: cover;">
+                            </a>
+                        <%})%>
+
+                 
+                    </div>
+            </section >
+        </div>
+    </div>
+        <div class="pagination">
+        </div>
+        <%-include('../partials/footer.ejs')%>

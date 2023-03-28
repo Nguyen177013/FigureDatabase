@@ -1,0 +1,25 @@
+<%-include('../partials/header.ejs')%>
+    <%-include('../partials/nav.ejs')%>
+    <style>
+        div{
+            font-size: 1.4rem;
+            display: inline;
+        }
+        select{
+            
+            margin: 0.8rem 0;
+            width: 17.5rem;
+            height: 3rem;
+        }
+        form{
+            width: 955px;
+        }
+    </style>
+     <form action="/createOrg" method="POST" enctype="multipart/form-data" >
+        <div class="control-label col-md-2">Tên tác phẩm:</div>
+        <input type="text" name="name" required>
+        <div class="control-label col-md-2">Hình Ảnh </div>
+        <input type="file" name = "img" required>
+        <input type="submit">
+    </form>
+    <%-include('../partials/footer.ejs')%>

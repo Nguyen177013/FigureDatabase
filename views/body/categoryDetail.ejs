@@ -1,0 +1,44 @@
+<%-include('../partials/header.ejs')%>
+    <%-include('../partials/nav.ejs')%>
+    <!-- porducts -->
+    <div class="grid wide">
+        <div class="row">
+            <section class="product">
+               
+                <div class="product-content row">
+                   
+                    <div class="product-content-right">
+                        <div class="product-content-right-product-name">
+                            <h1>
+                              <br> Loại figure:<%=category.name%></h1></br>
+                            </h1>
+                        </div>
+
+                        
+                    
+          
+                    </div>
+                </div>
+            </section>
+            <section class="product">
+                <div class="product-content-right">
+                    <div class="product-content-right-product-name">
+                        </div>
+                        <h1>Một số figures loại <%=category.name%>:</h1>
+                        <!-- Tạo vòng lặp figure theo thông tin figures:figures -->
+                        <%figures.forEach(fig=>{%>
+                            <!-- tạo thẻ a để vào chi tiết figure theo ID -->
+                            <a href="/detail/<%=fig._id%>">
+                                <!--  -->
+                                <img src="<%=fig.images[0]%>" alt="" style="width: 70px;
+                            height: 70px;
+                            object-fit: cover;">
+                            </a>
+                        <%})%>
+                    </div>
+            </section >
+        </div>
+    </div>
+        <div class="pagination">
+        </div>
+        <%-include('../partials/footer.ejs')%>

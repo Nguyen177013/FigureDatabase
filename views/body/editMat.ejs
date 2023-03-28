@@ -1,0 +1,38 @@
+<%-include('../partials/header.ejs')%>
+    <%-include('../partials/nav.ejs')%>
+    <style>
+        div{
+            font-size: 1.4rem;
+            display: inline;
+        }
+        select{
+            
+            margin: 0.8rem 0;
+            width: 17.5rem;
+            height: 3rem;
+        }
+        form{
+            width: 955px;
+        }
+    </style>
+    
+    <form action="/editMat/<%=detail._id%>" method="POST" enctype="multipart/form-data" >
+        <div class="control-label col-md-2">Tên vật liệu:</div>
+        <input type="text" name="name" value="<%=detail.name%>" required>
+        
+
+       
+        
+       
+      
+      
+       <br>
+      
+       
+       <div class="control-label col-md-2">Hình ảnh:</div>
+        <input type="file" name = "img" multiple>
+        <div class="control-label col-md-2">Thông tin chi tiết:</div>
+        <input type="text" placeholder="Link" name="about" value="<%=detail.Homepage%>">
+        <input type="submit">
+    </form>
+    <%-include('../partials/footer.ejs')%>

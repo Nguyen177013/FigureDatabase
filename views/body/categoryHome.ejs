@@ -1,0 +1,35 @@
+<%-include('../partials/header.ejs')%>
+    <%-include('../partials/nav.ejs')%>
+    <!-- porducts -->
+        <div class="blogs content">
+                    <!-- <h2>There're no blogs to display</h2> -->
+                    <div class="col l-3">
+                        <%data.forEach(category=>{%>
+                            <a href="/categoryDetail/<%=category._id%>" class="home-product-item">
+                                <div class="flip-card">
+                                    <div class="flip-card__inner">
+                                        <div class="flip-card__front">
+                                            <div class="home-product-item__img" style="background-image: url(<%=artists.image%>);"></div>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                <h4 class="home-product-item__name"><%=category.name%></h4>
+                                <!-- <div class="home-product-item__price">6.000.000VND</div> -->
+                                <button class="btn home-product-item__add">Xem thêm</button>
+                            </a>
+                        <%})%>
+                      
+                    </div>
+
+
+                   
+        </div>
+        <div class="pagination">
+        </div>
+        <style>
+            footer{
+                background-color: #fff;
+            }
+        </style>
+        <%-include('../partials/footer.ejs')%>

@@ -1,0 +1,51 @@
+<%-include('../partials/header.ejs')%>
+<link href="/popup.css" rel="stylesheet">
+<script defer src="/script/popup.js"></script>
+<link href="/style.css" rel="stylesheet">
+<link href="/table.css" rel="stylesheet">
+<script defer src="/script/findPost.js"></script>
+    <%-include('../partials/nav.ejs')%>
+
+    <table style="margin-top:10px" class="table">
+    <tr>
+        <th>
+            UID:
+        </th>
+        <th>
+            Name:
+        </th>
+        <th>
+            Payment:
+        </th>
+        <th>
+           Account status:
+        </th>
+        <th>
+            Date:
+        </th>
+        
+        <th></th>
+    </tr>
+    <%data.purchage.forEach(Account=>{%> 
+    
+       <tr>
+        <td>
+           <%=Account.user.id%>
+        </td>
+        <td>
+            <%=Account.user.username%>
+        </td>
+        <td>
+            true
+        </td>
+        <td>
+            true
+        </td>
+        <td>
+            <%=Account.expireAt%>
+        </td>
+        <%})%>
+    </tr> 
+    
+</table>
+            <%-include('../partials/footer.ejs')%>

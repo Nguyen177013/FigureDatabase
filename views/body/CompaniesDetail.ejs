@@ -1,0 +1,75 @@
+<%-include('../partials/header.ejs')%>
+<link href="/popup.css" rel="stylesheet">
+<script defer src="/script/popup.js"></script>
+    <%-include('../partials/nav.ejs')%>
+    <!-- porducts -->
+    <button data-modal-target="#modal">chỉnh sửa</button>
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="title">Chỉnh sửa nhãn hiệu</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="/editCom/<%=detail._id%>" method="POST" enctype="multipart/form-data" >
+            <div class="control-label col-md-2">Tên thương hiệu:</div>
+            <input type="text" name="name" value="<%=detail.name%>" required>
+           <br>
+           <div class="control-label col-md-2">Hình ảnh:</div>
+            <input type="file" name = "img" multiple>
+            <div class="control-label col-md-2">Homepage:</div>
+            <input type="text" placeholder="Link" name="Homepage" value="<%=detail.Homepage%>">
+            <input type="submit">
+        </form>
+      </div>
+    </div>
+    <div id="overlay"></div>
+    <div class="grid wide">
+        <div class="row">
+            <section class="product">
+               
+                <div class="product-content row">
+                    
+                   
+                    <div class="product-content-right">
+                        <div class="product-content-left-big-img">
+                            <img src="<%=detail.image%>" alt="">
+                        </div>
+                        <div class="product-content-right-product-name">
+                            <h1>
+                              <br> Tên công ty:<%=detail.name%></h1></br>
+                            </h1>
+                        </div>
+
+                        <div class="product-content-right-product-name">
+                            <h1>
+                              <br>Trang FanPage:<%=detail.Homepage%></br>
+                            </h1>
+                        </div>
+                    
+          
+                    </div>
+                </div>
+            </section>
+            <section class="product">
+                <div class="product-content-right">
+                    <div class="product-content-right-product-name">
+                        </div>
+                        
+                        <h1>Một số figures đến từ <%=detail.name%>:</h1>
+                        <!-- Tạo vòng lặp figure theo thông tin figures:figures -->
+                        <%figures.forEach(fig=>{%>
+                            <!-- tạo thẻ a để vào chi tiết figure theo ID -->
+                            <a href="/detail/<%=fig._id%>">
+                                <!--  -->
+                                <img src="<%=fig.images[0]%>" alt="" style="width: 70px;
+                            height: 70px;
+                            object-fit: cover;">
+                            </a>
+                        <%})%>
+                    </div>
+            </section >
+        </div>
+    </div>
+        <div class="pagination">
+        </div>
+        <%-include('../partials/footer.ejs')%>

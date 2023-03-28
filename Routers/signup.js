@@ -1,0 +1,16 @@
+const express = require('express');
+const router = express.Router();
+const user = require('../controllers/user');
+const passport = require('passport');
+router.get('/login',user.login_get);
+router.get('/logout',user.logOut);
+router.get('/register',user.register_get);
+router.get('/sendmail',user.sendEmail_get);
+router.get('/facebook', passport.authenticate('facebook',{scope:'email'}));
+router.get('/facebook/callback',user.facebookLoggin);
+router.get('/google',passport.authenticate('google',{scope: ['profile', 'email']}));
+router.get('/google/callback',user.googleLoggin);
+router.post('/sendmail',user.sendEmail_post);
+router.post('/login',user.login_post);
+router.post('/register',user.register_post);
+module.exports = router;

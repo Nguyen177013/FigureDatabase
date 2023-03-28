@@ -1,0 +1,347 @@
+<%-include('../partials/header.ejs')%>
+    <link rel="stylesheet" href="../style/social.css">
+    <%-include('../partials/nav.ejs')%>
+        <main>
+            <div class="social_media">
+                <div class="poster">
+                    <div class="contain">
+                        <div class="user_post">
+                            <form action="/figure-wiki/post" method="POST" enctype="multipart/form-data">
+                                <div class="form_post">
+                                    <div class="option_img user_img">
+                                    </div>
+                                    <div class="user_text">
+                                        <textarea rows="4" cols="50" name="body"
+                                            placeholder="Describe post here..." required></textarea>
+                                    </div>
+                                </div>
+                                <div class="image_showcase">
+                                </div>
+                                <div class="form_option">
+                                    <div class="option_img user_img">
+                                        <label for="file_input">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-6 h-6">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </label>
+                                        <input type="file" id="file_input" style="display: none;" multiple name = "img"
+                                            onchange="displayImg();">
+                                    </div>
+                                    <div class="selection">
+                                        <select class="origin" name="origin" onchange="enableChar();">
+                                            <option selected value="0" class="select_org">Figure Characters ...</option>
+                                            <%characters.forEach(character=>{%>
+                                                <option value="<%=character._id%>">
+                                                    <%=character.name%>
+                                                </option>
+                                                <%})%>
+                                        </select>
+                                    </div>
+                                    <div class="selection">
+                                        <select class="character" name="Character" onchange="enableButton();">
+                                            <option selected value="0" class="select_char">Figure Char ...</option>
+                                        </select>
+                                    </div>
+                                    <div class="selection">
+                                        <select class="privacy" name="privacy">
+                                            <option selected value="false" class="select_char">Public</option>
+                                            <option value="true" class="select_char">Private</option>
+                                        </select>
+                                    </div>
+                                    <div class="send_post">
+                                        <button type="submit" class="send_btn">
+                                            post
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="list_posts">
+                            <%posts.forEach(post=>{%>
+                                <%if(post.privacy){%> 
+                                    <%if(check || (post?.user.id == user.id)){%>
+                                <div class="user_post" data-id="<%=post.id%>">
+                                <div class="form_post list_post">
+                                    <div class="about_user">
+                                        <div class="option_img user_img">
+                                            <%if(post?.user.image.img_url){%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="<%=post.user.image.img_url%>"alt="">
+                                                </a>
+                                            <%}else{%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="/detail/unknow.png" alt="">
+                                                </a>
+                                            <%}%>
+                                        </div>
+                                        <div class="user_info">
+                                            <a href="/user/<%=post.user._id%>"><%=post.user.username%></a>
+                                        </div>
+                                        <%if(post.user.id == user.id){%>                                    
+                                        <div class="post_option">
+                                            <div class="option_btn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                  </svg>
+                                                    
+                                                </div>
+                                        </div>  
+                                        <%}%>
+                                    </div>
+                                    <div class="userTitle">
+                                        <%=post.title%>
+                                    </div>
+                                    <div class="main_img">
+                                        <%post.images.forEach(image=>{%>
+                                            <div class="user_imgs">
+                                                <img src="<%=image.url%>"
+                                                    alt="">
+                                            </div>
+                                        <%})%>
+                                    </div>
+                                </div>
+                                <div class="form_favorate">
+                                    <div class="favorate_btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-6 h-6">
+                                            <path
+                                                d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                        </svg>
+                                        <span>2.3k</span>
+                                    </div>
+                                    <div class="comments">
+                                        <span>comment 2.3k</span>
+                                    </div>
+                                </div>
+                                <div class="form_comment">
+                                    <div class="user_cmt">
+                                        <div class="option_img">
+                                            <%if(user.image.img_url){%>
+                                                <a href="/user/<%=user._id%>">
+                                                    <img src="<%=user.image.img_url%>"alt="">
+                                                </a>
+                                            <%}else{%>
+                                                <a href="/user/<%=user._id%>">
+                                                    <img src="/detail/unknow.png" alt="">
+                                                </a>
+                                            <%}%>
+                                        </div>
+                                        <div class="cmt">
+                                            <form>
+                                                <textarea rows="4" cols="50" placeholder="Comment here..."></textarea>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="list_comments">
+                                        <div class="about_user">
+                                            <div class="option_img comment_img">
+                                                <a href="">
+                                                    <img src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-1/279095969_1926112194242983_641351116880888048_n.jpg?stp=cp0_dst-jpg_p60x60&_nc_cat=110&ccb=1-7&_nc_sid=7206a8&_nc_ohc=rXsmzehYoCcAX89y6Zl&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfD77JTO7FK363u6CjrXRyBd5lW69vQ_atLkZX9vq0_xqw&oe=6373D933"
+                                                        alt="">
+                                                </a>
+                                            </div>
+                                            <div class="user_cmts cmts">
+                                                <div class="user_name">
+                                                    Phan Nguyen
+                                                </div>
+                                                <div class="cmt">
+                                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa et
+                                                        placeat
+                                                        quam itaque quas? Minima, aliquid! Aliquam delectus, harum porro
+                                                        voluptates placeat dolores nostrum sit animi corrupti ipsam id
+                                                        cumque!
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="comments_option">
+                                                <div class="option_img">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        fill="currentColor" class="w-6 h-6">
+                                                        <path fill-rule="evenodd"
+                                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm0 8.625a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM15.375 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+
+                                                </div>
+                                                <div class="sub_options">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>   
+                            <%}else{%>
+                             <div class="user_post" data-id="<%=post.id%>">
+                                <div class="form_post list_post">
+                                    <div class="about_user">
+                                        <div class="option_img user_img">
+                                            <%if(post.user.image.img_url){%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="<%=post.user.image.img_url%>"alt="">
+                                                </a>
+                                            <%}else{%>
+                                                <a href="/user/<%=post.user._id%>">
+                                                    <img src="/detail/unknow.png" alt="">
+                                                </a>
+                                            <%}%>
+                                        </div>
+                                        <div class="user_info">
+                                            <a href="/user/<%=post.user._id%>"><%=post.user.username%></a>
+                                        </div>
+                                        <%if(post.user.id == user.id){%>                                    
+                                        <div class="post_option">
+                                            <div class="option_btn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                  </svg>
+                                                    
+                                                </div>
+                                        </div>  
+                                        <%}%>
+                                    </div>
+                                    <div class="userTitle">
+                                        <%=post.title%>
+                                    </div>
+                                        <div class="secret_img">    
+                                            <div class="btn_secret">
+                                                <a href="/purchage">Be come a Pro</a>
+                                            </div>
+                                            <div class="main_img blur_img">
+                                                <%post.images.forEach(image=>{%>
+                                                    <div class="user_imgs">
+                                                        <img src="<%=image.url%>"
+                                                            alt="">
+                                                    </div>
+                                                <%})%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   
+                            <%}%>
+                                <%} else{%>
+                                    <div class="user_post" data-id="<%=post.id%>">
+                                        <div class="form_post list_post">
+                                            <div class="about_user">
+                                                <div class="option_img user_img">
+                                                    <%if(post?.user.image.img_url){%>
+                                                        <a href="/user/<%=post.user._id%>">
+                                                            <img src="<%=post.user.image.img_url%>"alt="">
+                                                        </a>
+                                                    <%}else{%>
+                                                        <a href="/user/<%=post.user._id%>">
+                                                            <img src="/detail/unknow.png" alt="">
+                                                        </a>
+                                                    <%}%>
+                                                </div>
+                                                <div class="user_info">
+                                                    <a href="/user/<%=post.user._id%>"><%=post.user.username%></a>
+                                                </div>
+                                                <%if(post?.user.id == user.id){%>                                    
+                                                <div class="post_option">
+                                                    <div class="option_btn">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                          </svg>
+                                                            
+                                                        </div>
+                                                </div>  
+                                                <%}%>
+                                            </div>
+                                            <div class="userTitle">
+                                                <%=post.title%>
+                                            </div>
+                                            <div class="main_img">
+                                                <%post.images.forEach(image=>{%>
+                                                    <div class="user_imgs">
+                                                        <img src="<%=image.url%>"
+                                                            alt="">
+                                                    </div>
+                                                <%})%>
+                                            </div>
+                                        </div>
+                                        <div class="form_favorate">
+                                            <div class="favorate_btn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                                    class="w-6 h-6">
+                                                    <path
+                                                        d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                                </svg>
+                                                <span>2.3k</span>
+                                            </div>
+                                            <div class="comments">
+                                                <span>comment 2.3k</span>
+                                            </div>
+                                        </div>
+                                        <div class="form_comment">
+                                            <div class="user_cmt">
+                                                <div class="option_img">
+                                                    <%if(user.image.img_url){%>
+                                                        <a href="/user/<%=user._id%>">
+                                                            <img src="<%=user.image.img_url%>"alt="">
+                                                        </a>
+                                                    <%}else{%>
+                                                        <a href="/user/<%=user._id%>">
+                                                            <img src="/detail/unknow.png" alt="">
+                                                        </a>
+                                                    <%}%>
+                                                </div>
+                                                <div class="cmt">
+                                                    <form>
+                                                        <textarea rows="4" cols="50" placeholder="Comment here..."></textarea>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="list_comments">
+                                                <div class="about_user">
+                                                    <div class="option_img comment_img">
+                                                        <a href="">
+                                                            <img src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-1/279095969_1926112194242983_641351116880888048_n.jpg?stp=cp0_dst-jpg_p60x60&_nc_cat=110&ccb=1-7&_nc_sid=7206a8&_nc_ohc=rXsmzehYoCcAX89y6Zl&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfD77JTO7FK363u6CjrXRyBd5lW69vQ_atLkZX9vq0_xqw&oe=6373D933"
+                                                                alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div class="user_cmts cmts">
+                                                        <div class="user_name">
+                                                            Phan Nguyen
+                                                        </div>
+                                                        <div class="cmt">
+                                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa et
+                                                                placeat
+                                                                quam itaque quas? Minima, aliquid! Aliquam delectus, harum porro
+                                                                voluptates placeat dolores nostrum sit animi corrupti ipsam id
+                                                                cumque!
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comments_option">
+                                                        <div class="option_img">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                                fill="currentColor" class="w-6 h-6">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm0 8.625a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM15.375 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+        
+                                                        </div>
+                                                        <div class="sub_options">
+                                                            <!-- <ul>
+                                                                <li>Report</li>
+                                                            </ul> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div> 
+                                <%}%>
+                            <%})%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="/script/handlePost.js"></script>
+        <script src="/script/handleDelete.js"></script>
+        <%-include('./partials/footer.ejs')%>

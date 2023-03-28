@@ -1,0 +1,91 @@
+<%-include('../partials/header.ejs')%>
+<link href="/popup.css" rel="stylesheet">
+<link rel="stylesheet" href="/virtual-select.min.css">
+<script defer src="/script/popup.js"></script>
+    <%-include('../partials/nav.ejs')%>
+<div class="container">
+    <div class="row">
+        <h6>DashBoard</h6>
+        <div class="col-md-12">
+            <p>Chọn Năm: </p>
+            <select id="select" class="form-control" style="width:150px" onchange="change();">
+                <option value="0">Chọn Năm</option>
+        <%years.forEach(year=>{%>
+             <option value="<%=year%>"><%=year%></option>
+        <%})%>
+            </select>
+            <div id="dvChart">
+                <canvas style="height:300px" id="canvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/script/chart.min.js"></script>
+<script>
+    let select = document.getElementById('select')
+    async function change() {
+        let ctx = document.getElementById('canvas').getContext('2d');
+        let chartStatus = Chart.getChart("canvas");
+        if (chartStatus != undefined) {
+            chartStatus.destroy();
+        }
+        let year = select.value;
+        let req = await fetch('/123', {
+            method: 'POST',
+            body: JSON.stringify({ year }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        let data = await req.json();
+        let month = []
+        let count = [];
+        data.forEach(ele => {
+            month.push(ele._id.month);
+            count.push(ele.count);
+        });
+        var barChartData = {
+
+            labels: month,
+            datasets: [
+                {
+                    label: `Total Account Created in ${year}`,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1,
+                    data: count,
+
+                }
+
+            ]
+        }
+
+        let myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+            },
+        });
+        myBarChart.update();
+    }
+</script>
+<style>
+    .col-md-12 {
+        margin-top: calc(var(--header-height) + var(--header-sub) + 32px);
+        margin-bottom: 52px;
+    }
+</style>

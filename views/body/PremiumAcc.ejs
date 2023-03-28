@@ -1,0 +1,49 @@
+<%-include('../partials/header.ejs')%>
+    <%-include('../partials/nav.ejs')%>
+    <!-- porducts -->
+        <div class="blogs content">
+                    <!-- <h2>There're no blogs to display</h2> -->
+                    <div class="col l-3">
+                       
+                             <h2>Premium account</h2>
+                                <div class="flip-card">
+                                    <div class="flip-card__inner">
+                                        <div class="flip-card__front">
+                                            <img src="/img/detail-product04/detail01.jpeg" alt="">
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                <h4 class="home-product-item__name">PremiumAcc</h4>
+                                <div class="home-product-item__price">10.00USD</div>
+                                <form action="/pay" method="POST" >   
+                                    <input type="submit" value="Pay with paypal">
+                                </form>
+                                <form method="GET" id="Momo">   
+                                    <input type="submit" value="Pay with MOMO">
+                                </form>
+                            </a>
+                      
+                      
+                    </div>
+
+
+                   
+        </div>
+        <div class="pagination">
+        </div>
+        <style>
+            footer{
+                background-color: #fff;
+            }
+        </style>
+        <script>
+            let send_Momo = document.getElementById('Momo');
+            send_Momo.addEventListener('click',async function(e){
+                e.preventDefault();
+                let req = await fetch('/momo');
+                let url = await req.json();
+                window.location.href = url;
+            })
+        </script>
+        <%-include('../partials/footer.ejs')%>

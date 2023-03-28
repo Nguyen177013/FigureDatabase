@@ -1,0 +1,20 @@
+<%-include('partials/header.ejs')%>
+    <h1>Made love with Wibu</h1>
+    <%data.forEach(figure=>{%>
+        <a href="/create">this is btn</a>
+        <div>
+            <%figure.images.forEach(img=>{%>
+                <img src="../imgs/<%=img%>" alt="" width="50px">          
+            <%})%>
+            <a href="/detail/<%=figure._id%>">
+                <span>
+                    <%=figure.origin%>
+                </span>
+                -
+                <%figure.character.forEach(char=>{%>
+                    <span><%=char.name%></span>
+                <%})%>
+            </a>
+        </div>
+        <%})%>
+<%-include('partials/footer.ejs')%>

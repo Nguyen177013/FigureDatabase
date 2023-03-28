@@ -30,6 +30,10 @@ const AccountSchema = new Schema({
         type: String,
         unique: true
     },
+    status:{
+        type:Boolean,
+        default: true
+    },
     dateCreate: {
         type: Date,
         default: Date.now

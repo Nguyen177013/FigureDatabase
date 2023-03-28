@@ -1,0 +1,211 @@
+<%-include('../partials/header.ejs')%>
+<link href="/popup.css" rel="stylesheet">
+<link rel="stylesheet" href="/virtual-select.min.css">
+<script defer src="/script/popup.js"></script>
+    <%-include('../partials/nav.ejs')%>
+
+    <link rel="stylesheet" href="../css/social.css">
+    <style>
+        main{
+            height: calc(100vh - 4.5rem);
+        }
+        .user{
+    display: flex;
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px 10px;
+    transition: all 0.2s;
+    border-radius: 10px;
+}
+.user:hover{
+    background-color: #3c445a;
+}
+.message_body{
+    flex: 6;
+}
+.list_message{
+    width: 25rem;
+}
+.message_name{
+}
+.main_message{
+    font-size: 15px;
+    color: #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.left_menu{
+    flex: 0.6;
+    border-right: 1px solid #ccc;
+}
+.poster{
+    flex: 1;
+    border-right: 1px solid #ccc;
+}
+.message{
+    flex: 2;
+}
+    </style>
+
+
+
+    <!-- porducts -->
+<div class="social_media">
+    <div class="left_menu">
+        <div class="menu_container">
+            <div class="sub_menu">
+                <div class="menu_options">
+                    <div class="options">
+                        
+                        <div class="option_item">
+                            <a href="/Dashbroad" class="form_post">
+                                <div class="option_img">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                                    </svg>
+                                </div>
+                                <div class="option_name">
+                                    <span>Dashbroad
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="option_item">
+                            <a href="/PostCheck" class="form_post">
+                                <div class="option_img">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                    </svg>
+                                </div>
+                                <div class="option_name">
+                                    <span>Post check
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="option_item">
+                            <a href="" class="form_post">
+                                <div class="option_img">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+    
+                                </div>
+                                <div class="option_name">
+                                    <span>Your Favorate
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="blogs content">
+            <button data-modal-target="#modal">Thêm figures</button>
+            <div class="modal" id="modal" style="    width: 56rem">
+              <div class="modal-header">
+                <div class="title">Thêm</div>
+                <button data-close-button class="close-button">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form action="/" method="POST" enctype="multipart/form-data" >
+                    <div class="control-label col-md-2">Tên figure:</div>
+                    <input type="text" name="name" required>
+                    <div class="control-label col-md-2">Loại:</div>
+                   <select name="category" id="">
+                        <%data.categories.forEach(category=>{%>
+                            <option value="<%=category._id%>"><%=category.name%></option>
+                        <%})%>
+                   </select>
+                   <div class="control-label col-md-2">Xuất hiện trong:</div>
+                   <select name="origin" id="">
+                        <%data.origins.forEach(origin=>{%>
+                            <option value="<%=origin._id%>"><%=origin.name%></option>
+                        <%})%>
+                   </select>
+                   <div><a href="/createOrg" class="btn btn-add">+</a></div>
+                   <div class="control-label col-md-2">Nhân vật: </div> 
+                   
+                   <select name="character" id="" multiple>
+                        <%data.characters.forEach(character=>{%>
+                            <option value="<%=character._id%>"><%=character.name%></option>
+                        <%})%>
+                   </select>
+                   <div><a href="/createChar" class="btn btn-add">+</a></div>
+                   <div class="control-label col-md-2">Công ty:</div>
+                   <select name="company" id="" multiple>
+                        <%data.companies.forEach(companie=>{%>
+                            <option value="<%=companie._id%>"><%=companie.name%></option>
+                        <%})%>
+                   </select>
+                   <div><a href="/createCom" class="btn btn-add">+</a></div>
+                   <br>
+                   <div class="control-label col-md-2">Người thiết kế:</div>
+                   <select name="artists" id="" multiple>
+                        <%data.artists.forEach(artist=>{%>
+                            <option value="<%=artist._id%>"><%=artist.name%></option>
+                        <%})%>
+                   </select>
+                   <div><a href="/createArt" class="btn btn-add">+</a></div>
+                   <div class="control-label col-md-2">Chất liệu:</div>
+                   <select name="materials" id="" multiple>
+                        <%data.materials.forEach(material=>{%>
+                            <option value="<%=material._id%>"><%=material.name%></option>
+                        <%})%>
+                   </select>
+                   <label for="release_date">Ngày sản xuất</label>
+                   <input type="date" name="release_date" id="release_date" required>
+                   <div class="control-label col-md-2">Hình ảnh:</div>
+                    <input type="file" name = "img" multiple required>
+                    <div class="control-label col-md-2">Giá tiền:</div>
+                    <input type="text" placeholder="price" name="price">
+                    <input type="submit">
+                </form>
+              </div>
+            </div>
+            <div id="overlay"></div>
+                    <div class="col l-3">
+                        <%figures.forEach(figure=>{%>
+                            <a href="/detail/<%=figure._id%>" class="home-product-item">
+                                <div class="flip-card">
+                                    <div class="flip-card__inner">
+                                        <div class="flip-card__front">
+                                            <div class="home-product-item__img" style="background-image: url(<%=figure.images[0]%>);"></div>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                <h4 class="home-product-item__name"><%=figure.name%></h4>
+                                <!-- <div class="home-product-item__price">6.000.000VND</div> -->
+                                <button class="btn home-product-item__add">Xem thêm</button>
+                            </a>
+                        <%})%>
+                      
+                    </div>
+
+
+                   
+        </div>
+        <div class="pagination">
+        </div>
+        <style>
+            footer{
+                background-color: #fff;
+            }
+        </style>
+        <script src="/script/virtual-select.min.js"></script>
+        <script>
+        VirtualSelect.init({ ele: 'select' ,
+        setValueAsArray:true});
+        </script>
+        <%-include('../partials/footer.ejs')%>
