@@ -1,0 +1,137 @@
+<%-include('../partials/header.ejs')%>
+    <link rel="stylesheet" href="../style/social.css">
+    <%-include('../partials/nav.ejs')%>
+        <main>
+            <div class="social_media">
+                <%-include('../partials/user_option.ejs')%>
+                <div class="poster">
+                    <div class="contain">
+                        <div class="list_posts">
+                            <%posts.forEach(post=>{%>%>
+                                <div class="user_post" data-id="<%=post.id%>">
+                                    <div class="form_post list_post">
+                                        <div class="about_user">
+                                            <div class="option_img user_img">
+                                                <%if(post.post.user.image.img_url){%>
+                                                    <a href="/user/<%=post.post.user._id%>">
+                                                        <img src="<%=post.post.user.image.img_url%>"alt="">
+                                                    </a>
+                                                <%}else{%>
+                                                    <a href="/user/<%=post.post.user._id%>">
+                                                        <img src="/detail/unknow.png" alt="">
+                                                    </a>
+                                                <%}%>
+                                            </div>
+                                            <div class="user_info">
+                                                <a href="/user/<%=post.post.user._id%>"><%=post.post.user.username%></a>
+                                                <p class="time_line"><%=new Date(post.post.dayPost).toDateString()%></p>
+                                            </div>
+                                            <%if(post.post.user.id == user.id){%>                                    
+                                            <div class="post_option">
+                                                <div class="option_btn">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 option">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                      </svg>
+                                                        
+                                                    </div>
+                                            </div>  
+                                            <%}%>
+                                        </div>
+                                        <div class="userTitle">
+                                            <%=post.post.title%>
+                                        </div>
+                                        <div class="main_img">
+                                            <%post.post.images.forEach(image=>{%>
+                                                <div class="user_imgs">
+                                                    <img src="<%=image.url%>"
+                                                        alt="" loading="lazy">
+                                                </div>
+                                            <%})%>
+                                        </div>
+                                    </div>
+                                    <div class="form_comment">
+                                        <div class="user_cmt">
+                                            <div class="option_img">
+                                                <%if(user.image.img_url){%>
+                                                    <a href="/user/<%=user._id%>">
+                                                        <img src="<%=user.image.img_url%>"alt="">
+                                                    </a>
+                                                <%}else{%>
+                                                    <a href="/user/<%=user._id%>">
+                                                        <img src="/detail/unknow.png" alt="">
+                                                    </a>
+                                                <%}%>
+                                            </div>
+                                            <div class="cmt">
+                                                <form>
+                                                    <textarea rows="4" cols="50" placeholder="Comment here..." class="text_comment" onkeypress="submit_form(event);"></textarea>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="list_comments">
+                                            <%if(post?.comments?.length > 0){%>
+                                                <%post.comments.forEach(comment=>{%>
+                                                <div class="about_user">
+                                                    <div class="option_img comment_img">
+                                                            <%if(comment.user.image.img_url){%>
+                                                                <a href="/user/<%=post.post.user._id%>">  
+                                                                    <img src="<%=comment.user.image.img_url%>" alt="">
+                                                                </a>
+                                                            <%}else{%>
+                                                                <a href="/user/<%=post.post.user._id%>">
+                                                                    <img src="/detail/unknow.png" alt="">
+                                                                </a>
+                                                            <%}%>
+                                                    </div>
+                                                    <div class="user_cmts cmts">
+                                                        <div class="user_name">
+                                                            <%=comment.user.username%>
+                                                        </div>
+                                                        <div class="cmt">
+                                                            <p>
+                                                                <%=comment.title%>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>   
+                                                <%})%>                                             
+                                            <%}%>
+                                        </div>
+                                    </div>
+                                </div> 
+                            <%})%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            let userId = '<%=user.id%>';
+            let favorate_btn = document.querySelectorAll('.favorate_btn svg');
+            favorate_btn.forEach((ele)=>{
+                ele.addEventListener('click', async function(e){
+                    let target = e.target;
+                    let postId = target.parentNode.parentNode.parentNode.parentNode.dataset.id;
+                    console.log(postId);
+                    let req = await fetch('/favorate/add/post',{
+                        method:"POST",
+                        body: JSON.stringify({userId,postId}),
+                        headers:{'Content-Type': 'application/json'}
+                    })
+                    let res = await req.json();
+                    if(res.delete){
+                        ele.classList.remove('favorated');
+                        target.parentNode.parentNode.childNodes[2].innerHTML = parseInt(target.parentNode.parentNode.childNodes[2].innerText) -1;                   
+                    }
+                    else{
+                        ele.classList.add('favorated')
+                        target.parentNode.parentNode.childNodes[2].innerHTML = parseInt(target.parentNode.parentNode.childNodes[2].innerText)+1;
+                    }
+                })
+            })
+        </script>
+        <script src="/script/handlePost.js"></script>
+        <script src="/script/commentHandle.js"></script>
+        <script src="/script/handleDelete.js"></script>
+        <%-include('../partials/footer.ejs')%>

@@ -7,7 +7,7 @@
         <div class="container list_info">
             <div class="detail_fig">
                 <div class="fig_info">
-                    <h2><%=character.name%></h2>
+                    <h2><%=artist.name%></h2>
                 </div>
             </div>
         </div>
@@ -16,9 +16,9 @@
         <div class="content">
             <div class="img_display">
                 <div class="flex_imgs col-2">
-                    <a class="main">
-                        <%if(character?.image){%>
-                            <img src="<%=character.image%>" alt="">
+                    <a href="" class="main">
+                        <%if(artist?.image){%>
+                            <img src="<%=artist.image%>" alt="">
                         <%}else{%>
                             <img src="/imgs/detail/empty.png" alt="">
                         <%}%>
@@ -26,9 +26,8 @@
                 </div>
                 <div class="fig_info bl">
                     <ul class="info">
-                        <li><strong>Character: </strong> <span><%=character.name%> </span></li>
-                        <li><strong>Original Name: </strong><span><%=character?.original%></span></li>
-                        <li><strong>From: </strong><span><%=figures[0]?.origin.name%></span></li>
+                        <li><strong>Artist Name: </strong> <span><%=artist.name%> </span></li>
+                        <li><strong>HomePage: </strong><a href="<%=artist.Homepage%>"><%=artist.Homepage%></a></li>
                         <li><strong>Companies Involve: 
                             <div class="compimgs">
                                 <%company.forEach(com=>{%>
@@ -37,7 +36,8 @@
                                         <img src="<%=com.image%>" alt="">
                                     </a>
                                 </div>
-                                <%})%> 
+                                <%})%>
+  
                             </div>
                         </li>
                     </ul>
@@ -46,7 +46,7 @@
     </section>
     <section class="detail">
         <div class="content info">
-            <h2>Figure Involve</h2>
+            <h2>Figure</h2>
             <div class="figures">
                 <%figures.forEach(figure=>{%>
                     <div class="figure_detail">

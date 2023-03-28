@@ -8,12 +8,8 @@
             try {
                 const req = await fetch('/figure/nav', {
                     method: 'POST',
-                    body: JSON.stringify({
-                        name: find_text.value
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    body: JSON.stringify({ name: find_text.value }),
+                    headers: { 'Content-Type': 'application/json' }
                 })
                 const data = await req.json();
                 list_data.replaceChildren();
@@ -33,7 +29,8 @@
                         list.innerHTML = html;
                         list_data.appendChild(list);
                     })
-                } else if (data.user) {
+                }
+                else if(data.user){
                     data.user.forEach(acc => {
                         let list = document.createElement('div');
                         let html = `
@@ -49,10 +46,12 @@
                         list_data.appendChild(list);
                     })
                 }
-            } catch (ex) {
+            }
+            catch (ex) {
                 console.log(ex.message);
             }
-        } else {
+        }
+        else {
             list_data.classList.remove('show_list');
         }
     }
@@ -60,12 +59,8 @@
         let userId = user;
         let req = await fetch('/user/remove_notify', {
             method: 'POST',
-            body: JSON.stringify({
-                id: userId
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            body: JSON.stringify({ id: userId }),
+            headers: { 'Content-Type': 'application/json' }
         })
         let res = await req.json();
         if (res) {
@@ -99,7 +94,8 @@
                             </div>
                             <div class="find">
                                 <form action="/figure/find">
-                                    <input type="text" name="name" placeholder="Find something ..." class="find_text" onkeydown="find()">
+                                    <input type="text" name="name" placeholder="Find something ..." class="find_text"
+                                        onkeydown="find()">
                                 </form>
                             </div>
                             <div class="find_data">

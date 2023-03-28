@@ -6,22 +6,7 @@
         <div class="container list_info">
             <div class="detail_fig">
                 <div class="fig_info">
-                    <h2>Items</h2>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section>
-        <div class="list_info">
-            <div class="detail_fig">
-                <div class="fig_info">
-                    <a href="">Items on Fire</a>
-                </div>
-                <div class="fig_info">
-                    <a href="">Most wished</a>
-                </div>
-                <div class="fig_info">
-                    <a href="">Best rated</a>
+                    <h2>Artists</h2>
                 </div>
             </div>
         </div>
@@ -29,13 +14,17 @@
     <section class="detail">
         <div class="content info">
             <div class="figures">
-                <%figures.forEach(figure=>{%>
+                <%artists.forEach(artist=>{%>
                 <div class="figure_detail">
-                    <a href="/figure/<%=figure._id%>">
-                        <img src="<%=figure.images[0]%>" alt="">
+                    <a href="/artist/<%=artist._id%>">
+                        <%if(artist?.image){%>
+                            <img src="<%=artist.image%>" alt="">
+                        <%}else{%>
+                            <img src="/imgs/detail/empty.png" alt="">
+                        <%}%>
                     </a>
                     <h5 class="about_figure">
-                        <%=figure.name%>
+                        <%=artist.name%>
                     </h5>
                 </div>
             <%})%>
